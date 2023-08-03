@@ -132,7 +132,7 @@ print(l_regions)
 plotsavedirname = f"{args.outputdir}{savedirsuffix}" # "PreselectionStudy_Blinded"
 
 os.system(f"mkdir -p {plotsavedirname}")
-os.system(f"cp index.php {plotsavedirname}")
+os.system(f"cp ../Data/index.php {plotsavedirname}")
 
 for region in l_regions :
 
@@ -146,7 +146,7 @@ for region in l_regions :
         SampleDic["BothNonprompt"] = ["Nonprompt (Both)",TColor.GetColor("#A5D7E8")]
 
     os.system(f"mkdir -p {plotsavedirname}/{region}")
-    os.system(f"cp index.php {plotsavedirname}/{region}")
+    os.system(f"cp ../Data/index.php {plotsavedirname}/{region}")
     for (vJ,vEl,vMu) in IDcomb :
         TauID = f"vJet{vJ}_vEl{vEl}_vMu{vMu}"
 
@@ -232,7 +232,7 @@ for region in l_regions :
             if debug : print(f"var : {var} {VarDic[var]}")
             savedir = f"{plotsavedirname}/{region}/{TauID}"
             os.system(f"mkdir -p {savedir}")
-            os.system(f"cp index.php {savedir}")
+            os.system(f"cp ../Data/index.php {savedir}")
             c = TCanvas(f"c_{region}_{TauID}_{var}",f"c_{region}_{TauID}_{var}",720,800)
             if debug : print(f"canvas : {c}")
             l = TLegend(0.385,0.75,0.865,0.875)
