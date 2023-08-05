@@ -25,8 +25,7 @@ print(f"Analyzer : {args.analyzername} ({args.era}) , will be saved in {args.out
 print(f"Userflags : {args.userflags} ")
 print(f"Divide Fakes : {args.dividefakes}")
 
-def getLumi(dirname) :
-    era = dirname.split("SKFlatOutput")[1].split("/")[3]
+def getLumi(era) :
     if era == "2016preVFP" : return 19.5
     elif era == "2016postVFP" : return 16.8
     elif era == "2017" : return 41.5
@@ -85,7 +84,7 @@ if args.userflags != "" :
     userflag = f"{args.userflags}__"
     savedirsuffix = f"_{args.userflags}"
 
-SampleDir = f"/data9/Users/youngwan/SKFlatOutput/Run2UltraLegacy_v3/{args.analyzername}/{args.era}/{userflag}"
+SampleDir = f"../RootFiles/20230804_132211"
 
 # Multiboson+jet : Red~Orange 
 # Multitop : Greenish
@@ -131,8 +130,8 @@ print(l_regions)
 
 plotsavedirname = f"{args.outputdir}{savedirsuffix}" # "PreselectionStudy_Blinded"
 
-os.system(f"mkdir -p {plotsavedirname}")
-os.system(f"cp ../Data/index.php {plotsavedirname}")
+os.system(f"mkdir -p ../Plots/{plotsavedirname}")
+os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}")
 
 for region in l_regions :
 
@@ -141,12 +140,12 @@ for region in l_regions :
 
     if not divfake : SampleDic["Nonprompt"] = ["Nonprompt(#tau_{h},"+lep+")",TColor.GetColor("#0B2447")]
     else : 
-        SampleDic["TauNonprompt"] = ["Nonprompt #tau_{h}",TColor.GetColor("#19376D")]
-        SampleDic["LeptonNonprompt"] = [f"Nonprompt {lep}",TColor.GetColor("#576CBC")]
-        SampleDic["BothNonprompt"] = ["Nonprompt (Both)",TColor.GetColor("#A5D7E8")]
+        SampleDic["PromptLepton__NonpromptTau__"] = ["Nonprompt #tau_{h}",TColor.GetColor("#19376D")]
+        SampleDic["NonpromptLepton__PromptTau__"] = [f"Nonprompt {lep}",TColor.GetColor("#576CBC")]
+        SampleDic["NonpromptLepton__NonpromptTau__"] = ["Nonprompt (Both)",TColor.GetColor("#A5D7E8")]
 
-    os.system(f"mkdir -p {plotsavedirname}/{region}")
-    os.system(f"cp ../Data/index.php {plotsavedirname}/{region}")
+    os.system(f"mkdir -p ../Plots/{plotsavedirname}/{region}")
+    os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{region}")
     for (vJ,vEl,vMu) in IDcomb :
         TauID = f"vJet{vJ}_vEl{vEl}_vMu{vMu}"
 
@@ -230,7 +229,7 @@ for region in l_regions :
             if hastobeBlinded : blindbins = VarDic[var][6][:len(VarDic[var][6])//2]
 
             if debug : print(f"var : {var} {VarDic[var]}")
-            savedir = f"{plotsavedirname}/{region}/{TauID}"
+            savedir = f"../Plots/{plotsavedirname}/{region}/{TauID}"
             os.system(f"mkdir -p {savedir}")
             os.system(f"cp ../Data/index.php {savedir}")
             c = TCanvas(f"c_{region}_{TauID}_{var}",f"c_{region}_{TauID}_{var}",720,800)
@@ -385,7 +384,7 @@ for region in l_regions :
 
             latex.SetTextFont(42)
             latex.SetTextSize(0.6*textSize)
-            lumi = str(getLumi(SampleDir))
+            lumi = str(getLumi(args.era))
             latex.DrawLatex(0.68, 0.9175,lumi+" fb^{-1} (13 TeV)")
 
             latex.SetTextFont(42)

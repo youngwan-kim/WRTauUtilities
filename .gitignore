@@ -161,4 +161,5 @@ cython_debug/
 #
 *.png
 *.pdf
-*.root
+RootFiles
+Plots
