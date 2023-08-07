@@ -24,9 +24,14 @@ def GetSKOutDir(analyzername,era) :
     return f"/data9/Users/youngwan/SKFlatOutput/Run2UltraLegacy_v3/{analyzername}/{era}"
 
 def HADDnGet(analyzername,era,flag,outdir) :
-    os.system(f"mkdir -p ../RootFiles/{outdir}/DATA")
-    if not flag == '' : flagstr = f"{flag}__"
+    
+    if not flag == '' : 
+        flagstr = f"{flag}__"
+        outdir = f"{outdir}__{flag}"
     else : flagstr = flag
+        
+
+    os.system(f"mkdir -p ../RootFiles/{outdir}/DATA")
 
     hadddir = f"{GetSKOutDir(analyzername,era)}/{flagstr}PromptLepton__PromptTau__"
     # Data
@@ -44,7 +49,7 @@ def HADDnGet(analyzername,era,flag,outdir) :
             os.system(f"hadd ../RootFiles/{outdir}/{analyzername}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
 
     for V in ["W","DY"] :
-        os.system(f"mv {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}")
+        os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}")
 
     # Nonprompt HADD
     fullnonprompt = ""

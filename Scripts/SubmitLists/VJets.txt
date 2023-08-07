@@ -1,0 +1,2 @@
+DYJets_MG_TauHLT
+WJets_MG_TauHLT
