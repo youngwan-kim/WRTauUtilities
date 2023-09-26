@@ -13,7 +13,6 @@ parser.add_argument('-a', dest='analyzername', type=str, help='Analyzer name',de
 parser.add_argument('-i', dest='input', type=str, help='Input directory timestamp')
 parser.add_argument('-e', dest='era', type=int, help='Era to plot', default=2017)
 parser.add_argument('--userflags', type=str, help='user flag used', default="")
-parser.add_argument('--WJGen', type=str, help='Wjets generator', default="MG")
 parser.add_argument('--outputdir', type=str, help='Output directory name',default=default_outputdir)
 parser.add_argument('--blind', action='store_true', help='Blind sensitive datapoints')
 parser.add_argument('--debugmode', action='store_true', help='debug flag')
@@ -63,15 +62,10 @@ def LeptonString_Explicit(region) :
 debug = args.debugmode
 willBlind = args.blind
 onlyPNG = args.onlypng
-wjgen = args.WJGen
 divfake = args.dividefakes
 
-if wjgen not in ["MG","Sherpa"] :
-    print(f"{wjgen} is not available")
-    exit
 
 print(f"Blinded : {willBlind} , OnlyPNG : {onlyPNG}, Debug : {debug}")
-print(f"WJets Generator : {wjgen}")
 
 l_vJetID = ["Loose","Medium","Tight"] 
 l_vElID = ["VVLoose","Tight"]
