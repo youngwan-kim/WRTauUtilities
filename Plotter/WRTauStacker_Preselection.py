@@ -29,6 +29,17 @@ print(f"Divide Fakes : {args.dividefakes}")
 bst_remove = ["Tight","Jets/Jet","AK4"]
 rsv_remove = ["Loose","FatJet"]
 
+def getXsec(mWR,mN) :
+    with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:
+        for line in f :
+            if mWR == float(line.split(",")[0]) and mN == float(line.split(",")[1]) : 
+                return float(line.split(",")[2])
+
+
+def getNormalization(era,mwr,mn) :
+    return getLumi(str(era))/getXsec(mwr,mn) 
+
+
 def remove_keys_containing_strings(dic, strings_to_remove):
     keys_to_remove = []
 
@@ -73,15 +84,8 @@ if wjgen not in ["MG","Sherpa"] :
 print(f"Blinded : {willBlind} , OnlyPNG : {onlyPNG}, Debug : {debug}")
 print(f"WJets Generator : {wjgen}")
 
-l_vJetID = ["Loose","Medium","Tight"] 
-l_vElID = ["VVLoose","Tight"]
-l_vMuID = ["VLoose","Tight"]
 
-l_vElID = ["Tight"]
-l_vMuID = ["Tight"]
-
-
-l_vJetID = ["Medium","Tight"] 
+l_vJetID = ["Tight"] 
 l_vElID = ["Tight"]
 l_vMuID = ["Tight"]
 
@@ -124,19 +128,11 @@ l_regions_presels = ["ResolvedPreselection","BoostedPreselection",
                      "ResolvedLowMassControlRegion","BoostedLowMassControlRegion",
                      "ResolvedLowMassControlRegionMass1","BoostedLowMassControlRegionMass1"]
 
-#l_regions_presels = ["Preselection_isBoostedNonisoLepPreselection"]#,"Preselection_isStrictResolvedPreselection","Preselection_isBoostedNonisoLepPreselectionTest"]
 
-l_regions_presels = ["BoostedLowMassControlRegion","BoostedLowMassControlRegionMass1"]
-#for region in l_regions_presels : 
-#    for cut in [50,100,150,200] :
-#        if region == "Preselection_isBoostedPreselection" :
-#            l_regions_withMET.append(f"{region}_MET{cut}")
-
-#if "Preselection_isBoostedPreselection" in l_regions_withMET : l_regions_withMET.remove("Preselection_isBoostedPreselection")
+l_regions_presels = ["BoostedLowMassControlRegion","BoostedLowMassControlRegionMass1","BoostedSignalRegion","BoostedSignalRegionMass1"]
 
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_MuTau"]] # ,"_ElTau", "_MuTau"
 
-#l_regions = ["Preselection_isResolvedPreselection","Preselection_isBoostedPreselection","Preselection_isBoostedNonisoLepPreselection","BoostedLowMassCR","ResolvedLowMassCR"]
 print(l_regions)
 
 plotsavedirname = f"{args.outputdir}{savedirsuffix}"  
@@ -207,6 +203,8 @@ for region in l_regions :
                 VarDic[f"{region}/HighPtLoose/Lepton_0_Pt"] = [True,50,f"Leading Loose {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,500.,[0,50,60,70,80,90,100,125,150,175,200,300,400,500],True]
                 #VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.]#,[0,190,210,230,250,270,290,310,330,350,370,600,1000],True] #[0,190,210,235,300,350,360,375,600,1000]
                 VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.,[0,190,210,250,300,350,400,450,500,550,600,1000],True] #[0,190,210,235,300,350,360,375,600,1000]
+            elif "SignalRegion" in region :
+                    VarDic[f"{region}/MTBoostedWR"] = [True,5,f"m_{{T}}(#tau_{{h}}{lep}J) [GeV]","MTthlJ",600.,4800.,[600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4200,4400,4600,4800],True]            
             else : 
                 VarDic[f"{region}/MTBoostedWR"] = [True,5,f"m_{{T}}(#tau_{{h}}{lep}J) [GeV]","MTthlJ",0.,1000.,[0,50,100,150,200,250,300,400,600,1000],True]
 
@@ -235,6 +233,9 @@ for region in l_regions :
                 VarDic[f"{region}/ProperMRecoNu_N"] = [True,50,"m_{N}^{#nu_{Reco}} [GeV] [GeV]","NuRecoNMass",0.,250.,[0,25,50,75,100,125,150,175,200,225,250],True]
         elif "LowMassControlRegion" in region : 
             VarDic[f"{region}/ProperMTWR"] = [True,50,"m_{W_{R}} [GeV]","MTWR",0.,800.,[0,100,200,300,400,500,600,800],True]
+
+        if "SignalRegion" in region :
+                VarDic[f"{region}/ProperMTWR"] = [True,50,"m_{W_{R}} [GeV]","MTWR",800.,4800.,[800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4200,4400,4600,4800],True]
 
         if "ElTau" in region : channel = "e#tau_{h}"
         elif "MuTau" in region : channel = "#mu#tau_{h}"
@@ -344,6 +345,9 @@ for region in l_regions :
             h_data_error.SetFillStyle(3144)
             h_data_error.GetXaxis().SetLabelSize(0)
             h_data_error.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
+            if "SignalRegion" in region :
+                    for i in range(1,h_data.GetNbinsX()+1):
+                        h_data.SetBinContent(i,0.0)
             ratio = h_data.Clone(f"{region}_{TauID}_{var}_ratio")
             data = h_stack.Clone(f"{region}_{TauID}_{var}_datapoints") #swap
             ratio.Divide(data)
@@ -386,7 +390,9 @@ for region in l_regions :
                 h_data.GetYaxis().SetRangeUser(0.01,max(l_max)*100000)
                 hs.SetMinimum(0.01); hs.SetMaximum(max(l_max)*100000)
                 pad_up.SetLogy()
-            hs.Draw("hist"); h_stackerr.Draw("e2&f&same"); h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
+            hs.Draw("hist"); h_stackerr.Draw("e2&f&same") # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
+            if "SignalRegion" not in region : h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
+
 
             l2 = TLegend(0.52,0.525,0.865,0.685)
             l2_str = "(m_{W_{R}},m_{N})="
@@ -470,7 +476,7 @@ for region in l_regions :
                     else : h_signal = h_signal_tmp.Clone(f"{region}_{TauID}_{var}_{mwr}_signal").Rebin(VarDic[var][1])
                     h_signal.SetDirectory(0)
                     h_signal.SetStats(0)
-                    h_signal.Scale(d_signals[mwr][0])
+                    h_signal.Scale(getNormalization(args.era,mwr,mn))
                     h_signal.SetLineColor(d_signals[mwr][1])
                     h_signal.SetLineWidth(3)
                     l2.AddEntry(h_signal,f"{l2_str}({mwr},{mn})GeV","lf")

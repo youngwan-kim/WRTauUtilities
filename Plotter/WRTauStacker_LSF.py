@@ -42,6 +42,15 @@ def remove_keys_containing_strings(dic, strings_to_remove):
     
     return dic
 
+def getXsec(mWR,mN) :
+    with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:
+        for line in f :
+            if mWR == float(line.split(",")[0]) and mN == float(line.split(",")[1]) : 
+                return float(line.split(",")[2])
+
+
+def getNormalization(era,mwr,mn) :
+    return getLumi(str(era))/getXsec(mwr,mn) 
 
 def getLumi(era) :
     if era == "2016preVFP" : return 19.5
@@ -75,7 +84,7 @@ l_vElID = ["Tight"]
 l_vMuID = ["Tight"]
 
 
-l_vJetID = ["Medium","Tight"] 
+l_vJetID = ["Loose","Medium","Tight"] 
 l_vElID = ["Tight"]
 l_vMuID = ["Tight"]
 
@@ -107,15 +116,14 @@ SampleDic = {
     "QCD" : ["QCD",TColor.GetColor("#1F487E")],
     "VVV" : ["VVV",TColor.GetColor("#4E0110")],
     "VV" : ["VV", TColor.GetColor("#DE1A1A")],
+    "DYJets_MG_TauHLT" : ["DY", TColor.GetColor("#F26419") ],
     "WJets_MG_TauHLT" : ["W+Jets", TColor.GetColor("#F2C14E")],
     "ST" : ["Single Top", TColor.GetColor("#04471C")],
-    "TT" : ["Top Pair", TColor.GetColor("#5FAD56") ],
-    "DYJets_MG_TauHLT" : ["DY", TColor.GetColor("#F26419") ],
-    
+    "TT" : ["Top Pair", TColor.GetColor("#5FAD56") ]
 }
 
-LSFCuts = ["0p50","0p65","0p70","0p75","0p80","0p85"]
-l_regions_presels = ["BoostedLowMassControlRegion","BoostedLowMassControlRegionMass1"]
+LSFCuts = ["0p60"]
+l_regions_presels = ["BoostedLowMassControlRegion","BoostedLowMassControlRegionMass1","BoostedSignalRegionMass1","BoostedSignalRegion"]
 
 l_regions = [ f"{r}_LSF{c}{suffix}" for r in l_regions_presels for c in LSFCuts for suffix in ["_MuTau"] ]
 
@@ -196,6 +204,8 @@ for d in [0]:
                     VarDic[f"{region}/HighPtLoose/Lepton_0_Pt"] = [True,50,f"Leading Loose {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,500.,[0,50,60,70,80,90,100,125,150,175,200,300,400,500],True]
                     #VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.]#,[0,190,210,230,250,270,290,310,330,350,370,600,1000],True] #[0,190,210,235,300,350,360,375,600,1000]
                     VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.,[0,190,210,250,300,350,400,450,500,550,600,1000],True] #[0,190,210,235,300,350,360,375,600,1000]
+                elif "SignalRegion" in region :
+                    VarDic[f"{region}/MTBoostedWR"] = [True,5,f"m_{{T}}(#tau_{{h}}{lep}J) [GeV]","MTthlJ",600.,4800.,[600,800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4200,4400,4600,4800],True]
                 else : 
                     VarDic[f"{region}/MTBoostedWR"] = [True,5,f"m_{{T}}(#tau_{{h}}{lep}J) [GeV]","MTthlJ",0.,1000.,[0,50,100,150,200,250,300,400,600,1000],True]
 
@@ -224,6 +234,9 @@ for d in [0]:
                     VarDic[f"{region}/ProperMRecoNu_N"] = [True,50,"m_{N}^{#nu_{Reco}} [GeV] [GeV]","NuRecoNMass",0.,250.,[0,25,50,75,100,125,150,175,200,225,250],True]
             elif "LowMassControlRegion" in region : 
                 VarDic[f"{region}/ProperMTWR"] = [True,50,"m_{W_{R}} [GeV]","MTWR",0.,800.,[0,100,200,300,400,500,600,800],True]
+
+            if "SignalRegion" in region :
+                VarDic[f"{region}/ProperMTWR"] = [True,50,"m_{W_{R}} [GeV]","MTWR",800.,4800.,[800,1000,1200,1400,1600,1800,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,4200,4400,4600,4800],True]
 
             if "ElTau" in region : channel = "e#tau_{h}"
             elif "MuTau" in region : channel = "#mu#tau_{h}"
@@ -333,6 +346,10 @@ for d in [0]:
                 h_data_error.SetFillStyle(3144)
                 h_data_error.GetXaxis().SetLabelSize(0)
                 h_data_error.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
+                if "SignalRegion" in region :
+                    for i in range(1,h_data.GetNbinsX()+1):
+                        h_data.SetBinContent(i,0.0)
+
                 ratio = h_data.Clone(f"{region}_{TauID}_{var}_ratio")
                 data = h_stack.Clone(f"{region}_{TauID}_{var}_datapoints") #swap
                 ratio.Divide(data)
@@ -375,7 +392,8 @@ for d in [0]:
                     h_data.GetYaxis().SetRangeUser(0.01,max(l_max)*100000)
                     hs.SetMinimum(0.01); hs.SetMaximum(max(l_max)*100000)
                     pad_up.SetLogy()
-                hs.Draw("hist"); h_stackerr.Draw("e2&f&same"); h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
+                hs.Draw("hist"); h_stackerr.Draw("e2&f&same"); 
+                if "SignalRegion" not in region : h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
 
                 l2 = TLegend(0.52,0.525,0.865,0.685)
                 l2_str = "(m_{W_{R}},m_{N})="
@@ -391,7 +409,7 @@ for d in [0]:
 
                 latex.SetTextFont(42)
                 latex.SetTextSize(0.6*textSize)
-                lumi = str(getLumi(args.era))
+                lumi = str(getLumi(str(args.era)))
                 latex.DrawLatex(0.68, 0.9175,lumi+" fb^{-1} (13 TeV)")
 
                 latex.SetTextFont(42)
@@ -426,9 +444,14 @@ for d in [0]:
                 if debug : print("flag")
 
                 pad_down.cd()
-
                 ratio.Draw("p&hist")
                 ratio_syst.Draw("e2&f&same")
+                #if "SignalRegion" not in region :
+                #    ratio.Draw("p&hist")
+                #    ratio_syst.Draw("e2&f&same")
+                #elif "SignalRegion" in region :
+                #    dummy_ratio = ratio.Clone()
+
                 c.cd()
                 pad_down.Draw()
                 pad_up.Draw()
@@ -457,9 +480,10 @@ for d in [0]:
                         h_signal_tmp.SetDirectory(0)
                         if len(VarDic[var]) > 6 : h_signal = h_signal_tmp.Clone(f"{region}_{TauID}_{var}_{mwr}_signal").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
                         else : h_signal = h_signal_tmp.Clone(f"{region}_{TauID}_{var}_{mwr}_signal").Rebin(VarDic[var][1])
+                        h_signal.Scale(getNormalization(args.era,mwr,mn))
                         h_signal.SetDirectory(0)
                         h_signal.SetStats(0)
-                        h_signal.Scale(d_signals[mwr][0])
+                        #h_signal.Scale(d_signals[mwr][0])
                         h_signal.SetLineColor(d_signals[mwr][1])
                         h_signal.SetLineWidth(3)
                         l2.AddEntry(h_signal,f"{l2_str}({mwr},{mn})GeV","lf")
