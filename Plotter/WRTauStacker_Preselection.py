@@ -29,6 +29,21 @@ print(f"Divide Fakes : {args.dividefakes}")
 bst_remove = ["Tight","Jets/Jet","AK4"]
 rsv_remove = ["Loose","FatJet"]
 
+def center_histogram(h1):
+
+    h_out = h.Clone("h_centerror")
+
+    # Get the number of bins in the original histogram
+    num_bins = h_out.GetNbinsX()
+
+    # Loop over the bins of the new histogram and set content to 1.0
+    for i in range(1, num_bins + 1):
+        h_out.SetBinContent(i, 1.0)
+
+    return h_out
+
+
+
 def getXsec(mWR,mN) :
     with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:
         for line in f :
@@ -118,10 +133,10 @@ SampleDic = {
     "QCD" : ["QCD",TColor.GetColor("#1F487E")],
     "VVV" : ["VVV",TColor.GetColor("#4E0110")],
     "VV" : ["VV", TColor.GetColor("#DE1A1A")],
-    "WJets_MG_TauHLT" : ["W+Jets", TColor.GetColor("#F2C14E")],
+    "WJets_MG" : ["W+Jets", TColor.GetColor("#F2C14E")],
     "ST" : ["Single Top", TColor.GetColor("#04471C")],
     "TT" : ["Top Pair", TColor.GetColor("#5FAD56") ],
-    "DYJets_MG_TauHLT" : ["DY", TColor.GetColor("#F26419") ],
+    "DYJets_MG" : ["DY", TColor.GetColor("#F26419") ],
     
 }
 
@@ -363,10 +378,9 @@ for region in l_regions :
             ratio.Divide(data)
             ratio.SetStats(0)
             if debug : print(ratio)
+            ratio_stat = ratio.Clone(f"{region}_{TauID}_{var}_ratio_stat")
             ratio_syst = ratio.Clone(f"{region}_{TauID}_{var}_ratio_syst")
-            ratio_syst.SetStats(0)
-            ratio_syst.SetFillColorAlpha(12,0.6)
-            ratio_syst.SetFillStyle(3144)
+
             ratio.SetTitle("")
             ratio.GetXaxis().SetTitle(VarDic[var][2])
             ratio.GetXaxis().SetTitleSize(0.15)
@@ -380,7 +394,7 @@ for region in l_regions :
             ratio.GetYaxis().SetTitleOffset(0.35)
             ratio.GetYaxis().CenterTitle(True)
             ratio.GetYaxis().SetNdivisions(204)
-            ratio.SetMarkerStyle(7)   
+            ratio.SetMarkerStyle(8)   
       
 
             if hastobeBlinded and willBlind : 
@@ -390,8 +404,17 @@ for region in l_regions :
                         ratio_syst.SetBinContent(ibin,-99.)
                         ratio_syst.SetBinError(ibin,0.)
             
+            
             ratio.GetXaxis().UnZoom();ratio_syst.GetXaxis().UnZoom()
    
+            for i in range(1, ratio_syst.GetNbinsX() + 1):
+                ratio_syst.SetBinContent(i, 1.0)
+
+            ratio_syst.SetStats(0)
+            ratio_syst.SetFillColorAlpha(kBlue,0.6)
+            ratio_syst.SetFillStyle(3144)
+            ratio_syst.SetMarkerStyle(kDot)
+            
             l_max = [] ; l_max.append(hs.GetMaximum()) ; l_max.append(h_data.GetMaximum())
             pad_up.cd()
             h_data.GetYaxis().SetRangeUser(0,max(l_max)*1.8)
@@ -454,8 +477,18 @@ for region in l_regions :
 
             pad_down.cd()
 
-            ratio.Draw("p&hist")
-            ratio_syst.Draw("e2&f&same")
+            # legend for ratio pad
+            l3 = TLegend(0.55,0.85,0.9,0.961)
+            l3.SetNColumns(2)
+            l3.SetFillStyle(0)
+            #l3.SetBorderSize(0)
+            l3.AddEntry(ratio,"Stat. Unc.","lp")
+            l3.AddEntry(ratio_syst,"Syst. Unc.","lf")
+
+            ratio.Draw("p&hist&e1")
+            ratio_syst.Draw("e2&f&same") #test ; not real systematic err yet
+
+            l3.Draw()
             c.cd()
             pad_down.Draw()
             pad_up.Draw()
