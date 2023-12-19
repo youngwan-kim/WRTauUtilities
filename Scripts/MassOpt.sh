@@ -1,0 +1,2 @@
+SKFlat.py -a WRTau_Analyzer -l $WRTau_WD/Scripts/SubmitLists/Signal.txt  --userflags MassOpt -n 5 -e 2017 &
+SKFlat.py -a WRTau_Analyzer -l $WRTau_WD/Scripts/SubmitLists/Bkg_All_Skim.txt  --skim SkimTree_LRSMTau --userflags MassOpt -n 5 -e 2017 &
