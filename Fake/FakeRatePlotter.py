@@ -2,7 +2,7 @@ from ROOT import *
 import array,os
 
 
-filename = "TauFake_20231221_143606"
+filename = "TauFake_20231222_102503"
 savestr = filename.split("_")[1]
 f_fake = TFile(f"{filename}.root")
 
@@ -57,24 +57,21 @@ def drawTagLatex(eta,nj,x=.875,y=.815) :
     latex.SetTextSize(0.425*textSize)
     latex.DrawLatex(x, y-0.095,f"({d_geoTag[eta]} , {d_njtag[nj]})")
 
-def drawLine(c,histogram):
-    y_value = 1.0
-    c.Update()
-    c.Range( 0., -10., 1., 10. )
-    #line = TLine(histogram.GetXaxis().GetXmin(), y_value, histogram.GetXaxis().GetXmax(), y_value)
-    line = TLine(0.0, y_value, 2000, y_value)
-    #print(histogram.GetXaxis().GetXmin())
-    #line.SetNDC(True)
+def drawLine(histogram):
+    line = TLine(histogram.GetXaxis().GetXmin(), 1.0, histogram.GetXaxis().GetXmax(), 0.)
+    #line = TLine(0.0, y_value, 2000, y_value)
+    print(histogram.GetXaxis().GetXmax())
+    line.SetNDC(True)
     line.SetLineStyle(2)  # Set line style to dotted
+    line.SetLineWidth(5)
     line.SetLineColor(kBlack)  # Set line color (black in this case)
     line.Draw("same")
-    gPad.Update()
 
 
 c = TCanvas("","",1000,1000)
 ptbins = [0,190,300,400,500,600,1000,2000]
 #ptbins = [0,190,400,2000]
-ptbins = [0,190,250,350,450,600,2000]
+ptbins = [0,190,220,250,300,350,400,450,600,800,1200,2000]
 
 for eta in d_geoTag :
     for nj in d_njtag :
@@ -93,7 +90,7 @@ for eta in d_geoTag :
             else : continue
             h_fr = h_tight.Clone(f"{r}_FR")
             h_fr.Divide(h_tight,h_loose,1,1,'B')
-            h_fr.GetYaxis().SetRangeUser(0,1.75)
+            h_fr.GetYaxis().SetRangeUser(0,1.5)
             h_fr.SetStats(0)
             h_fr.GetXaxis().SetTitle("p_{T}(#tau_{h})")
             h_fr.GetYaxis().SetTitleSize(0.05)
@@ -116,7 +113,8 @@ for eta in d_geoTag :
             h_fr.Draw("hist&same")
             drawLatex(i)
             drawTagLatex(eta,nj)
-            drawLine(c,h_fr)
+            c.Update()
+            drawLine(h_fr)
             c.Update()
             c.SaveAs(f"Plots/{savestr}/TauFR_{r}_{eta}_{nj}.png")
 
@@ -133,7 +131,7 @@ for eta in d_geoTag :
                 h_tight = h_tight_tmp.Rebin(len(ptbins)-1,f"Inclusive_{eta}_{nj}_Tight",array.array('d',ptbins))
                 h_fr = h_tight.Clone(f"Inclusive_FR")
                 h_fr.Divide(h_tight,h_loose,1,1,'B')
-                h_fr.GetYaxis().SetRangeUser(0,1.75)
+                h_fr.GetYaxis().SetRangeUser(0,1.5)
                 h_fr.SetStats(0)
                 h_fr.GetXaxis().SetTitle("p_{T}(#tau_{h})")
                 h_fr.GetYaxis().SetTitleSize(0.05)
@@ -155,7 +153,7 @@ for eta in d_geoTag :
                 h_fr.Draw("hist&same")
                 drawLatex(2)
                 drawTagLatex(eta,nj)
-                drawLine(c,h_fr)
+                drawLine(h_fr)
                 c.Update()
                 c.SaveAs(f"Plots/{savestr}/TauFR_Inclusive_{eta}_{nj}.png")
                 c.Close()
