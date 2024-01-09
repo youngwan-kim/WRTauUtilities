@@ -164,3 +164,5 @@ cython_debug/
 RootFiles
 Plots
 Fake/*.root
+Fake/Files/*
+Fake/FitResults/*
