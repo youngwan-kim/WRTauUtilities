@@ -166,3 +166,4 @@ Plots
 Fake/*.root
 Fake/Files/*
 Fake/FitResults/*
+Fake/Inputs/*

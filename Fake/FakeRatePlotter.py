@@ -1,10 +1,10 @@
 from ROOT import *
 import array,os
 
-
-filename = "TauFake_20240109_140142"
-savestr = filename.split("_",1)[1]+"BinOpt2"
-f_fake = TFile(f"{filename}.root")
+stamp = "20240110_212931"
+filename = f"TauFake_{stamp}"
+savestr = filename.split("_",1)[1]+"_genWeight_BinOpt1"
+f_fake = TFile(f"Inputs/{stamp}/{filename}.root")
 
 d_geoTag = {"All" : "#eta Inclusive",
             "B"   : "|#eta|<1.479",
@@ -89,12 +89,14 @@ ptbins =  [0, 190, 200, 220, 240, 280,320, 350,400,450,
 ptbins = [0,180,220,250,300,350,400,500,600,2000]
 
 
-ptbins = list(range(0, 1500, 20))
+#ptbins = [0]+ list(range(190, 400, 10)) + list(range(400, 700, 20)) +  list(range(700, 1000, 50)) + [1000,1500]
 
 #ptbins = [0,190, 200, 220, 240, 260, 280, 300, 320, 340, 360, 
 #          380, 400, 440, 480, 520, 560, 600, 720, 900, 1200,1500]
 
-ptbins =  [0, 190, 220, 250, 300,350,400,450,550,650,800,1000,1500]
+ptbins =  [0, 190, 220, 250, 300,350,400,450,550,650,800,1000,1200,1500] #BinOpt2
+ptbins =  [0, 190, 220, 250, 300,350,400,450,550,650,800,1000,1500] #BinOpt1
+#ptbins =  [0]+ list(range(190, 1500, 10)) # rawbins
 
 output_file = TFile(f"Files/{savestr}.root", "RECREATE")
 
@@ -156,10 +158,14 @@ for genmatch in ["Fake","Prompt"]:
 
             if h_loose_1 and h_loose_2  :
                 if h_tight_1 and h_tight_2  :
+                    #c2 = TCanvas("","",2000,1000)
+                    #c2.Divide(2,1)
                     h_loose_tmp = h_loose_1+h_loose_2
-                    h_loose = h_loose_tmp.Rebin(len(ptbins)-1,f"Inclusive_{eta}_{nj}_Loose",array.array('d',ptbins))
+                    h_loose = h_loose_tmp.Rebin(len(ptbins)-1,f"Inclusive_{genmatch}_{eta}_{nj}_Loose",array.array('d',ptbins))
+                    if eta == "All" and nj == "All" : h_loose.Write()
                     h_tight_tmp = h_tight_1+h_tight_2
-                    h_tight = h_tight_tmp.Rebin(len(ptbins)-1,f"Inclusive_{eta}_{nj}_Tight",array.array('d',ptbins))
+                    h_tight = h_tight_tmp.Rebin(len(ptbins)-1,f"Inclusive_{genmatch}_{eta}_{nj}_Tight",array.array('d',ptbins))
+                    if eta == "All" and nj == "All" : h_tight.Write()
                     h_fr = h_tight.Clone(f"Inclusive_{d_genmatch[genmatch]}_{eta}_{nj}")
                     h_fr.Divide(h_tight,h_loose,1,1,'B')
                     h_fr.GetYaxis().SetRangeUser(0,1.5)
