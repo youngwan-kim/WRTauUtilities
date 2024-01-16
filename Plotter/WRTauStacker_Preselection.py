@@ -166,9 +166,9 @@ for region in l_regions :
 
     if not divfake : SampleDic["Nonprompt"] = ["Nonprompt(#tau_{h},"+lep+")",TColor.GetColor("#0B2447")]
     else : 
-        SampleDic["PromptLepton__NonpromptTau__"] = ["NP #tau_{h}",TColor.GetColor("#19376D")]
-        SampleDic["NonpromptLepton__PromptTau__"] = [f"NP {lep}",TColor.GetColor("#576CBC")]
-        SampleDic["NonpromptLepton__NonpromptTau__"] = ["NP (Both)",TColor.GetColor("#A5D7E8")]
+        SampleDic["NonpromptTau__PromptLepton__"] = ["NP #tau_{h}",TColor.GetColor("#19376D")]
+        SampleDic["PromptTau__NonpromptLepton__"] = [f"NP {lep}",TColor.GetColor("#576CBC")]
+        SampleDic["NonpromptTau__NonpromptLepton__"] = ["NP (Both)",TColor.GetColor("#A5D7E8")]
 
     os.system(f"mkdir -p ../Plots/{plotsavedirname}/{region}")
     os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{region}")
