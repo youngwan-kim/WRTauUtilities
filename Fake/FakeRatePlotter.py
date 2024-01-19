@@ -23,6 +23,7 @@ d_genmatch = { "Fake"   : "FR",
                "Data"   : "DataDriven"
 }
 
+
 os.system(f"mkdir -p Plots/{savestr}")
 
 def drawLatex(region,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
@@ -107,6 +108,17 @@ ptbins =  [0, 190, 220, 250, 300,350,400,450,550,650,800,1000,1500] #BinOpt1
 ptbins = [0,190,200,210,220,230,250,275,300,325,350,375,400,450,500,600,800,1500]
 #ptbins = [0,190,200,210,220,230,240,250,275,300,350,400,450,500,1500]
 
+
+
+
+d_ptbins = {
+
+    "Inclusive"                     : [0] + list(range(190, 400, 10)) + list(range(400, 1500, 50)),
+    "BoostedSignalRegionMETInvert"  : [0] + list(range(190, 400, 10)) + list(range(400, 1500, 50)),
+    "ResolvedSignalRegionMETInvert" : [0] + list(range(190, 400, 10)) + list(range(400, 1500, 50))
+
+}
+
 d_ptbins = {
 
     "Inclusive"                     : [0,190,200,210,220,230,250,275,300,325,350,375,400,450,500,600,800,1500],
@@ -117,7 +129,10 @@ d_ptbins = {
 
 output_file = TFile(f"Files/{savestr}.root", "RECREATE")
 
-for genmatch in ["Data"]:
+l_subtract = ["NonSubtract","Subtract"]
+k = 0
+
+for genmatch in ["Data","Data"]:
     isDataDriven = genmatch == "Data"
     if isDataDriven : 
         f_fake   = TFile(f"Inputs/{stamp}/Data/{filename}.root")
@@ -148,15 +163,15 @@ for genmatch in ["Data"]:
                         h_tight_prompt = h_tight_prompt_tmp.Rebin(len(d_ptbins[r])-1,f"ddps_tight{r}",array.array('d',d_ptbins[r]))
                         h_tight_prompt.SetDirectory(0)
                     else : continue
-                    h_loose = h_loose - h_loose_prompt 
-                    h_tight = h_tight - h_tight_prompt
-                h_fr = h_tight.Clone(f"{r}_{d_genmatch[genmatch]}_{eta}_{nj}")
+                    if k == 0 :
+                        h_loose = h_loose - h_loose_prompt 
+                        h_tight = h_tight - h_tight_prompt
+                h_fr = h_tight.Clone(f"{r}_{d_genmatch[genmatch]}{l_subtract[k]}_{eta}_{nj}")
                 h_fr.Divide(h_tight,h_loose,1,1,'B')
-                if eta == "All" and nj == "All" : 
-                    original_directory = gDirectory.GetPath()
-                    output_file.cd()
-                    h_fr.Write()
-                    gDirectory.cd(original_directory)
+                original_directory = gDirectory.GetPath()
+                output_file.cd()
+                h_fr.Write()
+                gDirectory.cd(original_directory)
                 h_fr.GetYaxis().SetRangeUser(0,0.6)
                 h_fr.SetStats(0)
                 h_fr.GetXaxis().SetTitle("p_{T}(#tau_{h})")
@@ -184,8 +199,8 @@ for genmatch in ["Data"]:
                 c.Update()
                 drawLine(h_fr)
                 c.Update()
-                c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}_{r}_{eta}_{nj}.png")
-                c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}_{r}_{eta}_{nj}.pdf")
+                c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}_{eta}_{nj}.png")
+                c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}_{eta}_{nj}.pdf")
 
 
             h_loose_1 = f_fake.Get(f"WRTauFake/BoostedSignalRegionMETInvert/{genmatch}/TauPt_Loose_{eta}_{nj}")
@@ -250,8 +265,8 @@ for genmatch in ["Data"]:
                     drawTagLatex(eta,nj)
                     drawLine(h_fr)
                     c.Update()
-                    c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}_Inclusive_{eta}_{nj}.png")
-                    c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}_Inclusive_{eta}_{nj}.pdf")
+                    c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_Inclusive_{eta}_{nj}.png")
+                    c.SaveAs(f"Plots/{savestr}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_Inclusive_{eta}_{nj}.pdf")
                     c.Close()
-
+    k += 1
 output_file.Close()

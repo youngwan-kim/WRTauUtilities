@@ -42,7 +42,10 @@ def center_histogram(h1):
 
     return h_out
 
-
+def getLumiSyst(era) :
+    if era == "2016preVFP" or era == "2016postVFP" : return 0.025
+    elif era == "2017" : return 0.02
+    elif era == "2018" : return 0.015
 
 def getXsec(mWR,mN) :
     with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:
@@ -443,6 +446,11 @@ for region in l_regions :
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinContent(i, 1.0)
 
+            # Systematic Errors
+            for i in range(1, ratio_syst.GetNbinsX() + 1):
+                ratio_syst.SetBinError(i, getLumiSyst(args.era))
+
+
             ratio_syst.SetStats(0)
             ratio_syst.SetFillColorAlpha(kBlue,0.6)
             ratio_syst.SetFillStyle(3144)
@@ -525,7 +533,7 @@ for region in l_regions :
             l3.AddEntry(ratio_syst,"Syst. Unc.","lf")
 
             ratio.Draw("p&hist&e1")
-            #ratio_syst.Draw("e2&f&same") #test ; not real systematic err yet
+            ratio_syst.Draw("e2&f&same") #test ; not real systematic err yet
 
             l3.Draw()
             c.cd()
