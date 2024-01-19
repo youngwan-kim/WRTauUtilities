@@ -50,7 +50,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
     if hasSkim : 
         analyzername = basename + "_SkimTree_" + skim
         samplegroup = samplegroup_skim
-    os.system(f"hadd ../RootFiles/{outdir}/DATA/{analyzername}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
+    os.system(f"hadd ../RootFiles/{outdir}/DATA/{basename}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
 
     # Prompt HADD
     for sample in samplegroup :
