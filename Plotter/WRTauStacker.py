@@ -11,7 +11,7 @@ default_outputdir = f"Plots_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
 parser = argparse.ArgumentParser(description='The really not proud stupid effin plotter (2023) v2.213345661')
 parser.add_argument('-a', dest='analyzername', type=str, help='Analyzer name',default="WRTau_SR_Test")
 parser.add_argument('-i', dest='input', type=str, help='Input directory timestamp')
-parser.add_argument('-e', dest='era', type=int, help='Era to plot', default=2017)
+parser.add_argument('-e', dest='era', type=str, help='Era to plot', default=2017)
 parser.add_argument('--userflags', type=str, help='user flag used', default="")
 parser.add_argument('--WJGen', type=str, help='Wjets generator', default="MG")
 parser.add_argument('--outputdir', type=str, help='Output directory name',default=default_outputdir)
@@ -155,9 +155,11 @@ l_regions_presels = ["ResolvedPreselection","BoostedPreselection",
 l_regions_presels = ["BoostedPreselection","BoostedLowMassControlRegion","BoostedLowMassControlRegionMass1","BoostedSignalRegion","BoostedSignalRegionMass1"]
 #l_regions_presels = [ "BoostedLowMassControlRegionMass1"]
 
-l_regions_presels = ["BoostedPreselection","BoostedLowMassControlRegion",
+l_regions_presels = ["BoostedPreselection","BoostedLowMassControlRegion","BoostedSignalRegionLSFInvert",
                      "BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
                      "ResolvedPreselection","ResolvedLowMassControlRegion"]
+
+l_regions_presels = ["BoostedSignalRegionLSFInvert"]#,"ResolvedPreselection"]
 
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_MuTau"]] # ,"_ElTau", "_MuTau"
 
@@ -324,12 +326,13 @@ for region in l_regions :
             # h_tmp_ratio : temp TH1D for ratio derivation (=hist of h_stack) 
 
             for branch in branchlist :
-                j = 0
+                j = 0 ; k = 0 
                 for samplename in SampleDic : 
                     f = TFile(f"{SampleDir}/{args.analyzername}_{samplename}.root")
                     h = f.Get(f"WRTau_SignalSingleTauTrg{branch}/{TauID}/{var}")
-                    if h == None : continue
-                    print(f"{j} {samplename} {branch}")
+                    if h == None :
+                        k += 1
+                        continue
                     gROOT.cd()
                     if len(VarDic[var]) == 7 : 
                         h_tmp_HS = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
@@ -345,20 +348,24 @@ for region in l_regions :
                     h_tmp_ratio.Scale(1.08)
                     h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
                     h_tmp_HS.SetFillColorAlpha(SampleDic_NP[branch][1],0.95); h_tmp_HS.SetLineColor(kBlack)
+                    print(f"{j} {branch} {samplename} {SampleDic_NP[branch][1]}")
                     if j == 0 :
                         h_tmp_HS_NP = h_tmp_HS.Clone(f"HS_{region}_{TauID}_{var}_{samplename}{branch}_hist_clone")
                     else :
                         h_tmp_HS_NP += h_tmp_HS
                     h_stack.Add(h_tmp_ratio)
                     j += 1
-                h_tmp_HS_NP.GetYaxis().SetMaxDigits(2)
-                h_tmp_HS_NP.GetXaxis().SetLabelSize(0) 
-                h_tmp_HS_NP.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                h_tmp_HS_NP.Scale(1.08)
-                hs.Add(h_tmp_HS_NP)
-                l.AddEntry(h_tmp_HS_NP,SampleDic_NP[branch][0],"lf")
-                h_stack.GetXaxis().SetLabelSize(0)
-                h_stack.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
+                print(f"{branch} loop , h_tmp_HS_NP : {h_tmp_HS_NP}")
+                if k == len(SampleDic) : continue
+                else :  
+                    h_tmp_HS_NP.GetYaxis().SetMaxDigits(2)
+                    h_tmp_HS_NP.GetXaxis().SetLabelSize(0) 
+                    h_tmp_HS_NP.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
+                    h_tmp_HS_NP.Scale(1.08)
+                    hs.Add(h_tmp_HS_NP)
+                    l.AddEntry(h_tmp_HS_NP,SampleDic_NP[branch][0],"lf")
+                    h_stack.GetXaxis().SetLabelSize(0)
+                    h_stack.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
                 if debug : print(f"THStack : {h_stack}")
 
 
@@ -373,7 +380,7 @@ for region in l_regions :
             if h_data_tmp == None : continue
             if debug : print(f"DATA file : {f_data}")
             if debug : print(h_data_tmp)
-            print(h_data_tmp)
+            print(f"{h_data_tmp} flag1")
             hs.SetTitle("")
             hs.Draw()
             hs.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
@@ -388,6 +395,7 @@ for region in l_regions :
                 h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
                 if willBlind : h_data.GetXaxis().SetRange(1,len(blindbins))
             else : h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(VarDic[var][1])
+            print("flag 2")
             h_data.SetStats(0) 
             h_data.SetMarkerStyle(8)
             h_data.SetLineColor(kBlack)
@@ -406,7 +414,7 @@ for region in l_regions :
             h_data_error.GetXaxis().SetLabelSize(0)
             h_data_error.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
             if "SignalRegion" in region or "Preselection" in region :
-                if "METInvert" not in region :
+                if "Invert" not in region :
                     for i in range(1,h_data.GetNbinsX()+1):
                         h_data.SetBinContent(i,0.0)
             ratio = h_data.Clone(f"{region}_{TauID}_{var}_ratio")
@@ -446,10 +454,13 @@ for region in l_regions :
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinContent(i, 1.0)
 
+            print(getLumiSyst(args.era))
+
             # Systematic Errors
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinError(i, getLumiSyst(args.era))
 
+            print("flag 3")
 
             ratio_syst.SetStats(0)
             ratio_syst.SetFillColorAlpha(kBlue,0.6)
@@ -467,7 +478,7 @@ for region in l_regions :
             hs.Draw("hist"); h_stackerr.Draw("e2&f&same") # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
             if "SignalRegion" not in region : 
                 h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
-            elif "METInvert" in region : 
+            elif "Invert" in region : 
                 h_data.Draw("hist&e1&p&same"); # h_data_error.Draw("e1&f&same"); # h_stack.Draw("hist&same")
 
             l2 = TLegend(0.52,0.525,0.865,0.685)
@@ -500,8 +511,9 @@ for region in l_regions :
                 elif args.userflags == "inverseMETcut" : SRdesc = " (Inverse #slash{E}_{T})"
                 elif args.userflags == "NbGt0" : SRdesc = " (N_{b}#geq1)"
                 if "METInvert" in region : 
-                    if "Boosted" in region : region_latex = f"Boosted Fake CR"
-                    elif "Resolved" in region : region_latex = f"Resolved Fake CR"
+                    if "Boosted" in region : region_latex = f"Boosted #tau Fake CR"
+                    elif "Resolved" in region : region_latex = f"Resolved #tau Fake CR"
+                elif "LSFInvert" in region : region_latex = "Boosted Muon Fake CR"
                 else :
                     if "Boosted" in region : region_latex = f"Boosted SR{SRdesc}"
                     elif "Resolved" in region : region_latex = f"Resolved SR{SRdesc}"
@@ -519,6 +531,8 @@ for region in l_regions :
             latex.DrawLatex(0.125, 0.9175,f"{TauID}")
 
             l.Draw()
+
+            print("flag 5")
 
             if debug : print("flag")
 
@@ -579,7 +593,6 @@ for region in l_regions :
                     #print(VarDic[var])
                     h_signal.Draw("hist&same")
                     ind += 1
-
 
             
             c.cd()
