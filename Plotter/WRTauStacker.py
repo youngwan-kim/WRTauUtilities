@@ -159,7 +159,7 @@ l_regions_presels = ["BoostedPreselection","BoostedLowMassControlRegion","Booste
                      "BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
                      "ResolvedPreselection","ResolvedLowMassControlRegion"]
 
-l_regions_presels = ["BoostedSignalRegionLSFInvert"]#,"ResolvedPreselection"]
+l_regions_presels = ["BoostedSignalRegionLSFInvert","ResolvedPreselection"]
 
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_MuTau"]] # ,"_ElTau", "_MuTau"
 

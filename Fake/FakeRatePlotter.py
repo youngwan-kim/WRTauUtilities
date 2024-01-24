@@ -1,7 +1,7 @@
 from ROOT import *
 import array,os
 
-stamp = "20240116_163307"
+stamp = "20240122_152923"
 filename = f"TauFake_{stamp}"
 savestr = filename.split("_",1)[1]+"_MCWeight_BinTest"
 f_fake = TFile(f"Inputs/{stamp}/{filename}.root")
