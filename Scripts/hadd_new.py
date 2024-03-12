@@ -3,7 +3,9 @@ import os,argparse,glob
 from itertools import product
 from datetime import datetime
 
-samplegroup = {
+samplegroup = {}
+
+samplegroup_noskim = {
     "VVV" : ["WWW_TauHLT","WWZ_TauHLT","WZZ_TauHLT","ZZZ_TauHLT"],
     "VV" : ["WW_TauHLT","WZ_TauHLT","ZZ_TauHLT"],
     "ST" : [],
@@ -50,6 +52,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
     if hasSkim : 
         analyzername = basename + "_SkimTree_" + skim
         samplegroup = samplegroup_skim
+    else : samplegroup = samplegroup_noskim
     os.system(f"hadd ../RootFiles/{outdir}/DATA/{basename}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
 
     # Prompt HADD
@@ -66,22 +69,6 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
     for V in ["W","DY"] :
         if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}")
         else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG.root ../RootFiles/{outdir}/{basename}_{V}Jets_MG.root")
-
-    # Nonprompt HADD
-    #fullnonprompt = ""
-    #for np in nonprompts :
-    #    hadddir = f"{GetSKOutDir(basename,era)}/{flagstr}{np}"
-    #    allfiles = glob.glob(f"{hadddir}/*.root")
-    #    bkgonly = [file for file in allfiles if "WRtoTauNtoTau" not in file]
-    #    haddstr = ""
-    #    for bkgf in bkgonly : haddstr += f"{bkgf} "
-    #    os.system(f"hadd ../RootFiles/{outdir}/{basename}_{np}.root {haddstr}")
-    #    fullnonprompt += f"../RootFiles/{outdir}/{basename}_{np}.root "
-
-    #os.system(f"hadd ../RootFiles/{outdir}/{basename}_Nonprompt.root {fullnonprompt}")
-    
-
-
 
 
 if __name__ == '__main__':
