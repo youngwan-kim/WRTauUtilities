@@ -4,7 +4,6 @@ ST_tW_antitop_5f_nofullhaddec_TauHLT
 ST_tW_top_5f_nofullhaddec_TauHLT
 ST_tch_antitop_4f_inclusivedecays_TauHLT
 ST_tch_top_4f_inclusivedecays_TauHLT
-TTJJ_TauHLT
 TTLJ_TauHLT
 TTLL_TauHLT
 WW_TauHLT
@@ -30,3 +29,4 @@ ZZZ_TauHLT
 WZZ_TauHLT
 WWZ_TauHLT
 WWW_TauHLT
+TTJJ_TauHLT
