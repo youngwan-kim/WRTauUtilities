@@ -22,6 +22,12 @@ samplegroup_skim = {
     "QCD" : ["QCD*"],
 }
 
+signals = {
+    2000 : [200,1900],
+    4000 : [200,3900],
+    4800 : [200,4700]
+}
+
 l_lep = ['NonpromptLepton','PromptLepton']
 l_tau = ['NonpromptTau','PromptTau']
 
@@ -46,8 +52,8 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
         outdir = f"{outdir}__{flag}"
     else : flagstr = flag
         
-
     os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/DATA")
+    os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/Signals")
 
     hadddir = f"{GetSKOutDir(analyzername,era)}/{flagstr}"
     # Data
@@ -76,6 +82,10 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
     # Data Driven Tau Fake
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
 
+    # Signals
+    for mwr in signals :
+        for mn in signals[mwr] :
+            os.system(f"cp {hadddir}/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
 
 
 if __name__ == '__main__':

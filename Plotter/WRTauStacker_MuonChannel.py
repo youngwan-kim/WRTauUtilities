@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-
 import os, sys, argparse, itertools, array, argparse
 from ROOT import *
+from utils import *
 from datetime import datetime 
 gROOT.SetBatch(True)
 
@@ -28,69 +28,6 @@ print(f"Divide Fakes : {args.dividefakes}")
 
 bst_remove = ["Tight","Jets/Jet","AK4"]
 rsv_remove = ["Loose","FatJet"]
-
-def center_histogram(h1):
-
-    h_out = h.Clone("h_centerror")
-
-    # Get the number of bins in the original histogram
-    num_bins = h_out.GetNbinsX()
-
-    # Loop over the bins of the new histogram and set content to 1.0
-    for i in range(1, num_bins + 1):
-        h_out.SetBinContent(i, 1.0)
-
-    return h_out
-
-def getLumiSyst(era) :
-    if era == "2016preVFP" or era == "2016postVFP" : return 0.025
-    elif era == "2017" : return 0.02
-    elif era == "2018" : return 0.015
-
-def getXsec(mWR,mN) :
-    with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:
-        for line in f :
-            if mWR == float(line.split(",")[0]) and mN == float(line.split(",")[1]) : 
-                return float(line.split(",")[2])
-
-
-def getNormalization(era,mwr,mn) :
-    return getLumi(str(era))/getXsec(mwr,mn) 
-
-
-def remove_keys_containing_strings(dic, strings_to_remove):
-    keys_to_remove = []
-
-    for key in dic.keys():
-        for string in strings_to_remove:
-            if string in key:
-                keys_to_remove.append(key)
-                break
-    
-    for key in keys_to_remove:
-        dic.pop(key)
-    
-    return dic
-
-def getTauFakeNormalization(era) :
-    if era == "2017" : return 0.325
-    elif era == "2018" : return 0.31546321945
-
-def getLumi(era) :
-    if era == "2016preVFP" : return 19.5
-    elif era == "2016postVFP" : return 16.8
-    elif era == "2017" : return 41.5
-    elif era == "2018" : return 59.8
-
-def LeptonString(region) :
-    if "ElTau" in region : return "e"
-    elif "MuTau" in region : return "#mu"
-    else : return "e,#mu"
-
-def LeptonString_Explicit(region) :
-    if "ElTau" in region : return "Electron"
-    elif "MuTau" in region : return "Muon"
-    else : return "Lepton"
 
 debug = args.debugmode
 willBlind = args.blind
@@ -227,7 +164,7 @@ for region in l_regions :
             VarDic[f"{region}/FatJet/LSF"] = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
             VarDic[f"{region}/FatJet/dRJtau"] = [True,3,"#DeltaR(J_{lead},#tau_{h})","dRtauAK8",0.,6.]
             if "LowMassControlRegion" in region : 
-                VarDic[f"{region}/MET"] = [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,200,1000],True]
+                VarDic[f"{region}/MET"] = [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,200,250,1000],True]
                 #VarDic[f"{region}/FatJet/Mass"] = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,125,150,500],True]
                 #VarDic[f"{region}/FatJet/Pt"] = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,450,500,550,600,800,1000],True]
                 VarDic[f"{region}/HighPtLoose/Lepton_0_Pt"] = [True,50,f"Leading Loose {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,60,70,80,90,100,125,150,175,200,300,400,1000],True]
@@ -246,11 +183,12 @@ for region in l_regions :
             VarDic[f"{region}/dRtj0"] = [True,3,"#DeltaR(j_{lead},#tau_{h})","dRtauj0",0.,6.]
             VarDic[f"{region}/dRtj1"] = [True,3,"#DeltaR(j_{sublead},#tau_{h})","dRtauj1",0.,6.]
             if "LowMassControlRegion" in region : 
+                VarDic[f"{region}/MET"] = [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,200,250,1000],True]
                 VarDic[f"{region}/MTResolvedWR"] = [True,50,f"m_{{T}}(#tau_{{h}}{lep}jj) [GeV]","MTthjj",0.,800.,[0,50,100,150,200,250,300,400,600,800],True]
                 VarDic[f"{region}/Jets/Jet_0_Pt"] = [True,100,"Leading AK4 Jet Pt (GeV)","AK4j0_Pt",0.,1000.,[0,40,100,150,200,250,300,350,400,500,600,700,800,900,1000],True]
                 VarDic[f"{region}/Jets/Jet_1_Pt"] = [True,50,"Subleading AK4 Jet Pt (GeV)","AK4j1_Pt",0.,300.,[0,10,20,30,40,50,60,70,80,90,100,125,300],True]
                 VarDic[f"{region}/HighPtLoose/Lepton_0_Pt"] = [True,50,f"Leading Loose {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,100,200,400,600,1000],True]
-                VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.,[0,190,250,300,350,400,450,500,550,600,1000],True] #[0,190,200,210,220,230,240,250,500]
+                VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,1000.,[0,190,250,300,350,400,450,500,1000],True] #[0,190,200,210,220,230,240,250,500]
             else : 
                 VarDic[f"{region}/MTResolvedWR"] = [True,50,f"m_{{T}}(#tau_{{h}}{lep}jj) [GeV]","MTthjj",0.,1000.,[0,50,100,150,200,250,300,400,600,1000],True]
 
@@ -356,14 +294,14 @@ for region in l_regions :
                     h_tmp_ratio.Scale(1.08)
                     h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
                     h_tmp_HS.SetFillColorAlpha(SampleDic_NP[branch][1],0.95); h_tmp_HS.SetLineColor(kBlack)
-                    print(f"{j} {branch} {samplename} {SampleDic_NP[branch][1]}")
+                    #print(f"{j} {branch} {samplename} {SampleDic_NP[branch][1]}")
                     if j == 0 :
                         h_tmp_HS_NP = h_tmp_HS.Clone(f"HS_{region}_{TauID}_{var}_{samplename}{branch}_hist_clone")
                     else :
                         h_tmp_HS_NP += h_tmp_HS
                     h_stack.Add(h_tmp_ratio)
                     j += 1
-                print(f"{branch} loop , h_tmp_HS_NP : {h_tmp_HS_NP}")
+                #print(f"{branch} loop , h_tmp_HS_NP : {h_tmp_HS_NP}")
                 if k == len(SampleDic) : continue
                 else :  
                     h_tmp_HS_NP.GetYaxis().SetMaxDigits(2)
@@ -387,7 +325,6 @@ for region in l_regions :
             if h_data_tmp == None : continue
             if debug : print(f"DATA file : {f_data}")
             if debug : print(h_data_tmp)
-            print(f"{h_data_tmp} flag1")
             hs.SetTitle("")
             hs.Draw()
             hs.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
@@ -402,7 +339,6 @@ for region in l_regions :
                 h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
                 if willBlind : h_data.GetXaxis().SetRange(1,len(blindbins))
             else : h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(VarDic[var][1])
-            print("flag 2")
             h_data.SetStats(0) 
             h_data.SetMarkerStyle(8)
             h_data.SetLineColor(kBlack)
@@ -461,13 +397,9 @@ for region in l_regions :
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinContent(i, 1.0)
 
-            print(getLumiSyst(args.era))
-
             # Systematic Errors
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinError(i, getLumiSyst(args.era))
-
-            print("flag 3")
 
             ratio_syst.SetStats(0)
             ratio_syst.SetFillColorAlpha(kBlue,0.6)
@@ -539,8 +471,6 @@ for region in l_regions :
 
             l.Draw()
 
-            print("flag 5")
-
             if debug : print("flag")
 
             pad_down.cd()
@@ -576,7 +506,7 @@ for region in l_regions :
                 for mwr in d_signals :
                     if "Boosted" in region : mn = 200
                     elif "Resolved" in region : mn = mwr-100    
-                    f_signal = TFile(f"{os.getenv('WRTau_Output')}/{args.input}/Signals/{args.analyzername}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
+                    f_signal = TFile(f"{os.getenv('WRTau_Output')}/{args.input}/{args.era}/Signals/{args.analyzername}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
                     h_signal_tmp = f_signal.Get(f"WRTau_SignalSingleTauTrg/{TauID}/{var}")
                     if h_signal_tmp == None : continue
                     h_signal_tmp.SetDirectory(0)
@@ -590,9 +520,10 @@ for region in l_regions :
                     h_signal.SetDirectory(0)
                     h_signal.SetStats(0)
                     h_signal.Scale(getNormalization(args.era,mwr,mn))
+                    scalelabel = "{:.2f}".format(getNormalization(args.era,mwr,mn))
                     h_signal.SetLineColor(d_signals[mwr][1])
                     h_signal.SetLineWidth(3)
-                    l2.AddEntry(h_signal,f"{l2_str}({mwr},{mn})GeV","lf")
+                    l2.AddEntry(h_signal,f"{l2_str}({mwr},{mn})GeV #times {scalelabel}","lf")
                     #l2.AddEntry(h_signal,f"{l2_str}({mwr},{mn})GeV#times{d_signals[mwr][0]}","lf")
                     pad_up.cd()
                     #print(h_signal)
