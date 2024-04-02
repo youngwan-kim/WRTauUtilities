@@ -3,7 +3,9 @@ import os,argparse,glob
 from itertools import product
 from datetime import datetime
 
-samplegroup = {
+samplegroup = {}
+
+samplegroup_noskim = {
     "VVV" : ["WWW_TauHLT","WWZ_TauHLT","WZZ_TauHLT","ZZZ_TauHLT"],
     "VV" : ["WW_TauHLT","WZ_TauHLT","ZZ_TauHLT"],
     "ST" : [],
@@ -14,8 +16,8 @@ samplegroup = {
 
 samplegroup_skim = {
     "VVV" : ["WWW","WWZ","WZZ","ZZZ"],
-    "VV" : ["WW_pythia","WZ_pythia","ZZ_pythia"],
-    "ST" : ["SingleTop*"],
+    "VV" : ["WW_*","WZ_*","ZZ_*"],
+    "ST" : ["SingleTop*","ST*"],
     "TT" : ["TT*"],
     "QCD" : ["QCD*"],
 }
@@ -34,6 +36,9 @@ def GetSKOutDir(analyzername,era) :
 
 def HADDnGet(analyzername,era,flag,outdir,skim) :
     
+    if era == "2017" : samplegroup_skim["ST"] = ["SingleTop*"]
+    elif era == "2018" : samplegroup_skim["ST"] = ["ST*"]
+
     hasSkim = skim is not ''
 
     if not flag == '' : 
@@ -42,15 +47,16 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
     else : flagstr = flag
         
 
-    os.system(f"mkdir -p ../RootFiles/{outdir}/DATA")
+    os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/DATA")
 
-    hadddir = f"{GetSKOutDir(analyzername,era)}/{flagstr}PromptLepton__PromptTau__"
+    hadddir = f"{GetSKOutDir(analyzername,era)}/{flagstr}"
     # Data
     basename = analyzername
     if hasSkim : 
         analyzername = basename + "_SkimTree_" + skim
         samplegroup = samplegroup_skim
-    os.system(f"hadd ../RootFiles/{outdir}/DATA/{analyzername}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
+    else : samplegroup = samplegroup_noskim
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/DATA/{basename}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
 
     # Prompt HADD
     for sample in samplegroup :
@@ -58,29 +64,17 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
             haddstr = ""
             for name in samplegroup[sample] :
                 haddstr += f"{hadddir}/{analyzername}_{name}.root "
-            os.system(f"hadd ../RootFiles/{outdir}/{basename}_{sample}.root {haddstr}")
+            os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {haddstr}")
 
         else : 
-            os.system(f"hadd ../RootFiles/{outdir}/{basename}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
+            os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
 
     for V in ["W","DY"] :
-        if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}")
-        else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG.root ../RootFiles/{outdir}/{basename}_{V}Jets_MG.root")
+        if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}/{era}")
+        else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG.root ../RootFiles/{outdir}/{era}/{basename}_{V}Jets_MG.root")
 
-    # Nonprompt HADD
-    fullnonprompt = ""
-    for np in nonprompts :
-        hadddir = f"{GetSKOutDir(basename,era)}/{flagstr}{np}"
-        allfiles = glob.glob(f"{hadddir}/*.root")
-        bkgonly = [file for file in allfiles if "WRtoTauNtoTau" not in file]
-        haddstr = ""
-        for bkgf in bkgonly : haddstr += f"{bkgf} "
-        os.system(f"hadd ../RootFiles/{outdir}/{basename}_{np}.root {haddstr}")
-        fullnonprompt += f"../RootFiles/{outdir}/{basename}_{np}.root "
-
-    os.system(f"hadd ../RootFiles/{outdir}/{basename}_Nonprompt.root {fullnonprompt}")
-    
-
+    # Data Driven Tau Fake
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
 
 
 
@@ -88,7 +82,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hadd output files from WRTauAnalyzer')
     parser.add_argument('--flag'  , type=str , help='Additional flag used' , default = '' ) 
     parser.add_argument('--outdir', type=str , help='Output dir'           , default = GetTMPDir() )
-    parser.add_argument('--era'   , type=int , help='Era, if 0 full era combination')
+    parser.add_argument('--era'   , type=str , help='Era')
     parser.add_argument('--skim'  , type=str , help='Skim name i.e Name if SkimTree_Name' , default = '' )
     parser.add_argument('--analyzername', type=str , help='Analyzer name'  , default = 'WRTau_Analyzer' )
     args = parser.parse_args()

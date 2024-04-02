@@ -22,24 +22,16 @@ d_ptbins = {
 
     "tag"                                : "BinOptv1",
     "Inclusive_2017"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_2017"  : [0] + list(range(190, 240, 10)) + [240,260,280,330,380,425,525,1500],
-    "ResolvedSignalRegionMETInvert_2017" : [0,190] + list(range(200, 380, 20)) + [380,420,450,560,1500],
+    "BoostedSignalRegionMETInvert_2017"  : [0,190,210,230,270,300,330,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvert_2017" : [0,190,210,230,270,300,320,350,380,450,1000],#[0,190,230,270,320,360,400,480,1000],
     "Inclusive_2018"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_2018"  : [0] + list(range(190, 300, 10)) + [300,320,340,360,380,400,450,500,550,1500],
-    "ResolvedSignalRegionMETInvert_2018" : [0,190,210,230,250,270,300,320,340,360,380,400,425,450,480,500,525,1500]
+    "BoostedSignalRegionMETInvert_2018"  : [0,190,210,230,270,310,335,400,450,550,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
+    "ResolvedSignalRegionMETInvert_2018" : [0,190,230,270,320,360,400,480,525,1000]
+    # [0,190,210,230,250,270,300,320,340,360,400,480,525,1500]
 
 }
 
 savestr += f"_{d_ptbins['tag']}"
-
-'''
-d_ptbins = {
-
-    "Inclusive"                     : [0,190,200,210,220,230,250,275,300,325,350,375,400,450,500,600,800,1500],
-    "BoostedSignalRegionMETInvert"  : [0,190,210,220,230,250,275,300,325,350,375,400,500,600,700,800,1100,1500],
-    "ResolvedSignalRegionMETInvert" : [0,190,210,230,250,270,290,310,330,350,375,400,450,500,550,650,750,1000,1500]
-
-}'''
 
 l_subtract = ["NonSubtract","Subtract"]
 
@@ -47,16 +39,19 @@ for era in ["2017","2018"]:
     k = 0
     os.system(f"mkdir -p Plots/{savestr}/{era}")
     os.system(f"mkdir -p Files/{savestr}")
-    output_file = TFile(f"Files/{savestr}/{era}.root", "RECREATE")
-    for genmatch in ["Data","Data"]:
+    #for genmatch in ["Data","Data"]:
+    for genmatch in ["Prompt"]:
+        output_file = TFile(f"Files/{savestr}/{era}_{genmatch}.root", "RECREATE")
         isDataDriven = genmatch == "Data"
+        isPromptRate = genmatch == "Prompt"
+        f_fake = TFile(f"Inputs/{stamp}/{era}/{filename}.root")
         if isDataDriven : 
             f_fake   = TFile(f"Inputs/{stamp}/{era}/Data/{filename}.root")
             f_prompt = TFile(f"Inputs/{stamp}/{era}/{filename}.root")
-        #if genmatch == "Prompt" : ptbins = ptbins = list(range(0, 2001, 10))
         for eta in d_geoTag :
             for nj in d_njtag :
                 for i,r in enumerate(["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert"]) :
+                    if isPromptRate : d_ptbins[f"{r}_{era}"] = [0,190,220,250,350,1000]
                     c = TCanvas("","",1000,1000)
                     h_loose_tmp = f_fake.Get(f"WRTauFake/{r}/{genmatch}/TauPt_Loose_{eta}_{nj}")
                     if h_loose_tmp :
@@ -88,7 +83,8 @@ for era in ["2017","2018"]:
                     output_file.cd()
                     h_fr.Write()
                     gDirectory.cd(original_directory)
-                    h_fr.GetYaxis().SetRangeUser(0,0.6)
+                    if isPromptRate : h_fr.GetYaxis().SetRangeUser(0,1.5) 
+                    else : h_fr.GetYaxis().SetRangeUser(0,0.6) 
                     h_fr.SetStats(0)
                     h_fr.GetXaxis().SetTitle("p_{T}(#tau_{h})")
                     h_fr.GetYaxis().SetTitleSize(0.05)

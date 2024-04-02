@@ -1,0 +1,60 @@
+ FCN=2.06494 FROM MIGRAD    STATUS=CONVERGED      75 CALLS          76 TOTAL
+                     EDM=8.60646e-20    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -5.13229e-02   2.10791e-01   8.46927e-06   0.00000e+00
+   2  p1           2.17138e-03   1.50341e-03   3.22991e-08  -3.78105e-07
+   3  p2          -4.07880e-06   2.54941e-06   1.09662e-10  -6.07442e-05
+ FCN=0.027792 FROM MIGRAD    STATUS=CONVERGED      12 CALLS          13 TOTAL
+                     EDM=1.51843e-19    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           1.45842e-01   3.01513e-02   1.49255e-05  -1.82771e-08
+ FCN=3.71823 FROM MIGRAD    STATUS=CONVERGED      77 CALLS          78 TOTAL
+                     EDM=8.8192e-23    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -1.91614e-01   2.09185e-01   9.77594e-06   6.81401e-11
+   2  p1           2.76689e-03   1.53450e-03   3.94561e-08   5.62764e-08
+   3  p2          -4.61329e-06   2.69841e-06   1.44636e-10   3.07039e-05
+ FCN=0.0212815 FROM MIGRAD    STATUS=CONVERGED      12 CALLS          13 TOTAL
+                     EDM=5.14146e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           1.68647e-01   4.26655e-02   2.10533e-05   2.37674e-09
+ FCN=3.6344 FROM MIGRAD    STATUS=CONVERGED      75 CALLS          76 TOTAL
+                     EDM=5.6971e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -4.58452e-02   1.19723e-01   8.63032e-06   1.67235e-09
+   2  p1           2.09633e-03   7.71599e-04   3.02537e-08  -7.33942e-08
+   3  p2          -3.70037e-06   1.13936e-06   8.75321e-11  -1.39520e-04
+ FCN=0.0187103 FROM MIGRAD    STATUS=CONVERGED      12 CALLS          13 TOTAL
+                     EDM=8.03687e-22    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           5.31106e-02   2.58914e-02   1.27600e-05  -1.54847e-09
+ FCN=5.72573 FROM MIGRAD    STATUS=CONVERGED      77 CALLS          78 TOTAL
+                     EDM=5.10767e-21    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0          -8.40770e-02   1.21326e-01   9.95665e-06  -1.78409e-09
+   2  p1           2.07443e-03   8.22314e-04   3.80163e-08  -3.50447e-07
+   3  p2          -3.26832e-06   1.30203e-06   1.24679e-10   1.78092e-05
+ FCN=0.00851829 FROM MIGRAD    STATUS=CONVERGED      12 CALLS          13 TOTAL
+                     EDM=8.41803e-20    STRATEGY= 1      ERROR MATRIX ACCURATE 
+  EXT PARAMETER                                   STEP         FIRST   
+  NO.   NAME      VALUE            ERROR          SIZE      DERIVATIVE 
+   1  p0           1.57793e-01   4.82819e-02   2.36753e-05   8.49838e-09
+Boundary: 450 Interval: 70 @ ResolvedSignalRegionMETInvert 2017 enum 3
+-0.05132294652031895,0.0021713765630938077,-4.078799237979005e-06
+,0.1458416355076168
+Boundary: 450 Interval: 70 @ BoostedSignalRegionMETInvert 2017 enum 3
+-0.19161378669718473,0.0027668856251805594,-4.613292834793495e-06
+,0.16864743043836866
+Boundary: 525 Interval: 45 @ ResolvedSignalRegionMETInvert 2018 enum 4
+-0.04584515677433494,0.0020963301990769858,-3.7003681819559146e-06
+,0.053110591379367605
+Boundary: 550 Interval: 100 @ BoostedSignalRegionMETInvert 2018 enum 4
+-0.08407703581903803,0.0020744293484913153,-3.2683183767448108e-06
+,0.15779344723593997

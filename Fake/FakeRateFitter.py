@@ -7,23 +7,28 @@ gStyle.SetOptFit(1100)
 filestr = "20240318_145423_MCWeight_BinOptv1"
 os.system(f"mkdir -p FitResults/{filestr}")
 
-
 d_region = {#"Inclusive":[600,100],
-            "ResolvedSignalRegionMETInvert":[[],[],[],[450,30],[525,25]],
-            "BoostedSignalRegionMETInvert":[[],[],[],[320,40],[550,50]]}
+            "ResolvedSignalRegionMETInvert":[[],[],[],[450,70],[525,45]],
+            "BoostedSignalRegionMETInvert":[[],[],[],[450,70],[550,100]]}
+
+def combinedFit(x,p):
+    x0 = p[0]
+    if x < x0:
+        return f(x)
+    else:
+        return g(x)
 
 for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
-    os.system(f" > FitResults/{filestr}/FitParam_{era}.txt")
     for r in d_region :
         if len(d_region[r][j]) == 0 : continue
         else :
+            os.system(f" > FitResults/{filestr}/FitParam_{r}_{era}.txt")
             file = TFile(f"Files/{filestr}/{era}.root")
             hist = file.Get(f"{r}_DataDrivenSubtract_All_All")
 
             quadratic = "[0] + [1]*x + [2]*x**2 + [3]*x**3  + [4]*x**4 "
+            cubic = "[0] + [1]*x + [2]*x**2 + [3]*x**3"
             parabolic = "[0] + [1]*x + [2]*x**2 "
-            params = [0, 0, 0, 0, 0]
-            params_p = [0, 0, 0]
             constant = "[0]"
 
             polynomial_formula = parabolic
@@ -32,13 +37,14 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             print(f"Boundary: {boundary} Interval: {interval} @ {r} {era} enum {j}")
 
             f = TF1("f", polynomial_formula, 190, boundary)  # piecewise scenario , lower pT polynomial degree 4
-            g = TF1("g",constant,boundary-interval,2000)          # piecewise scenario , higher pT low stat bin constant fit
-            #h = TF1("h", polynomial_formula, 190, 2000)     # whole scenario     , single polynomial fit with degree 4
-            #h = TF1("h", parabolic, 190, boundary)
-
+            
+            deg = f.GetNumberFreeParameters() - 1 
+            params = [0 for i in range(0,deg+1)]
             for i, value in enumerate(params):
                 f.SetParameter(i, value)
             
+            g = TF1("g",constant,boundary-interval,2000)          # piecewise scenario , higher pT low stat bin constant fit
+
             hist.Fit("f", "R")
             fit_results = hist.GetFunction("f")  
 
@@ -47,21 +53,11 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             hint0.SetStats(0)
             hint0.SetFillStyle(3005)
 
-            deg = f.GetNumberFreeParameters() - 1 
-
-            #print("Fit Results:")
-            #with open(f"FitResults/{filestr}/FitParam.txt",'w') as file :
-            #    print("test1")
-            #    file.write("Fitting Function 1 \n")
-            #    file.write(f"{polynomial_formula} from 190 to {boundary} \n")
-            #    print("test2")
-            #    for i in range(len(params)):
-            #        print("Parameter {}: {} +/- {}".format(i, fit_results.GetParameter(i), fit_results.GetParError(i)))
-            #        file.write("Parameter {}: {} +/- {} \n".format(i, fit_results.GetParameter(i), fit_results.GetParError(i)))
+            print(f"{fit_results.GetParameter(0)},{fit_results.GetParameter(1)},{fit_results.GetParameter(2)}")
+            #for i in range(len(params)):
+            #    print(fit_results.GetParameter(i))
 
             g.SetParameter(0,f(boundary))
-            #g.SetParameter(0,0.1)
-            #g.SetParameter(1,0.1)
             hist.Fit("g", "R")
             fit_results_tail = hist.GetFunction("g")
 
@@ -70,28 +66,8 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             TVirtualFitter.GetFitter().GetConfidenceIntervals(hint,0.68)
             hint.SetStats(0)
             hint.SetFillStyle(3004)
+            print(f",{fit_results_tail.GetParameter(0)}")
 
-
-            #with open(f"FitResults/{filestr}/FitParam.txt",'a') as file :
-            #    file.write("\n Fitting Function 2 \n")
-            #    file.write(f"{constant} from {boundary-200} to 1500 \n")
-            #    file.write("Parameter : {} +/- {} \n".format(fit_results_tail.GetParameter(0), fit_results_tail.GetParError(0)))
-
-            #hist.Fit("h", "R")
-            #fit_results = hist.GetFunction("h")
-
-            #print("Fit Results:")
-            #with open(f"FitResults/{filestr}/FitParam.txt",'a') as file :
-            #    file.write("\n Fitting Function 3 \n")
-            #    file.write(f"{polynomial_formula} from 190 to 1500 \n")
-            #    for i in range(len(params)):
-            #        print("Parameter {}: {} +/- {}".format(i, fit_results.GetParameter(i), fit_results.GetParError(i)))
-            #        file.write("Parameter {}: {} +/- {} \n".format(i, fit_results.GetParameter(i), fit_results.GetParError(i)))
-            #
-
-            #print("Fit Results:")
-            #print("Parameter {}: {:.3f} +/- {:.3f}".format(0, fit_results_tail.GetParameter(0), fit_results.GetParError(0)))
-            
             # Draw the histogram and the fit function
             canvas = TCanvas(f"canvas{r}", "Fitted Histogram",1000,1000)
             l = TLegend(0.575,0.645,0.865,0.845)
@@ -159,20 +135,17 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             #l.AddEntry(h,"#splitline{Polynomial (deg=4, whole)}{#scale[0.75]{( #chi^{2}/ndf = "+whole_fitness+" )}}","l")
             l.Draw()
 
-            #x_intersection = Math.BrentRootFinder(Math.BrentRootFinderOptions(), 0).Solve(f, tailconstant_func, 0, 1500)
-            #combined_func = ROOT.TF1("combined_func", "[0]*x + [1]*(x >= %f)" % x_intersection, 0, 1500)
-            #combined_func.SetParameters(f.GetParameter(0), tailconstant_func.GetParameter(1))
-            #print(x_intersection)
-            #combined_func = TF1("combined_func", "f *(x < %f) + tailconstant_func *(x >= %f)" % (x_intersection, x_intersection), 0, 1500)
 
-            #finter = lambda x: abs(f.EvalPar(x) - tailconstant_func.EvalPar(x))
-            #x_int = 
-            #combined_func = TF1("combined", "max(f,g)" ,0,2000)
-            combined_func = TF1("combined", " g *(f < g) + f * (f >= g) " ,0,2000)
             output_file = TFile(f"FitResults/{filestr}/FitFunction_{r}_{era}_dim{deg}.root", "RECREATE")
             f.Write()
             g.Write()
-            combined_func.Write()
+            
+            #x_intersection = combined_func_test.GetMinimumX(250,2000)
+            #combined_func = TF1("Combined", combinedFit, 190, 1000, 1)  # Define TF1 with range (-10, 10) and 1 parameter
+            #combined_func.SetParameter(0, x_intersection) 
+            #print(x_intersection)
+            #combined_func = TF1("Combined", lambda x, params: f(x) if x < params[0] else g(x), 190, 1000, 1)
+            #combined_func.SetParameter(0, x_intersection) 
             output_file.Close()
 
             # Show the canvas
