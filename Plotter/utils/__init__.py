@@ -7,3 +7,4 @@ from .tools import getTauFakeNormalization
 from .tools import getLumi
 from .tools import LeptonString
 from .tools import LeptonString_Explicit
+from .tools import csv2dict

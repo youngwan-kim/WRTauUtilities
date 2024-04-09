@@ -1,5 +1,5 @@
 from ROOT import *
-import array,os
+import array,os,csv,ast
 
 def center_histogram(h1):
 
@@ -63,3 +63,18 @@ def LeptonString_Explicit(region) :
     if "ElTau" in region : return "Electron"
     elif "MuTau" in region : return "Muon"
     else : return "Lepton"
+
+
+def csv2dict(filename):
+    result_dict = {}
+    with open(filename, 'r') as csvfile:
+        csvreader = csv.reader(csvfile)
+        for row in csvreader:
+            if row and not row[0].startswith("#"):  # Skip lines starting with "#"
+                key = row[0]
+                values_tmp = row[1:]
+                values = [bool(values_tmp[0]),int(values_tmp[1]),
+                          str(values_tmp[2]),str(values_tmp[3]),
+                          float(values_tmp[4],float(values_tmp[5]))]
+                result_dict[key] = values
+    return result_dict

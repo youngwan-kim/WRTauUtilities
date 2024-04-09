@@ -1,0 +1,5 @@
+# Dictionary structure
+# (str) region : [ (bool) Logy , (int) rebin , (string) xaxislabel , (string) outputfilename , double:xmin , double:xmax , list(double):rebinningarray , bool:hastobeblind ]
+BoostedSignalRegionMETInvert/Nevents,True,1,nEvents,nEvents,0,1
+
+BoostedSignalRegionMETInvert/Jets/Jet_0_Pt,True,100,Leading AK4 Jet Pt (GeV),AK4j0_Pt,0.,2000.,[0,100,200,300,400,600,800,1000,2000],True
