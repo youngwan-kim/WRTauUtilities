@@ -88,6 +88,8 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
     # Boson Hadd
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_VVV.root ../RootFiles/{outdir}/{era}/{basename}_VV.root ../RootFiles/{outdir}/{era}/{basename}_DYJets_MG.root ../RootFiles/{outdir}/{era}/{basename}_WJets_MG.root")
+    # Top
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Top.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root")
 
     # Data Driven Tau Fake
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
@@ -97,6 +99,8 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
     # Lepton MC Fake
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_QCD.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root")
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hadd output files from WRTauAnalyzer')

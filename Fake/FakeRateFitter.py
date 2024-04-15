@@ -4,12 +4,18 @@ from utils import *
 import os
 gStyle.SetOptFit(1100)
 
-filestr = "20240318_145423_MCWeight_BinOptv1"
+filestr = "20240415_160115_BinOptv2_FlavourSplit"
 os.system(f"mkdir -p FitResults/{filestr}")
 
 d_region = {#"Inclusive":[600,100],
-            "ResolvedSignalRegionMETInvert":[[],[],[],[450,70],[525,45]],
-            "BoostedSignalRegionMETInvert":[[],[],[],[450,70],[550,100]]}
+            #"ResolvedSignalRegionMETInvert"       : [[],[],[],[450,70],[525,45]],
+            #"BoostedSignalRegionMETInvert"        : [[],[],[],[450,70],[550,100]],
+            "ResolvedSignalRegionMETInvert_ElTau" : [[],[],[400,50],[350,50],[400,100]],
+            "BoostedSignalRegionMETInvert_ElTau"  : [[],[],[450,130],[450,70],[500,100]],
+            "ResolvedSignalRegionMETInvert_MuTau" : [[],[],[550,150],[550,150],[550,150]],
+            "BoostedSignalRegionMETInvert_MuTau"  : [[],[],[450,140],[450,70],[400,70]]}
+
+l_region = {}
 
 def combinedFit(x,p):
     x0 = p[0]
@@ -23,7 +29,7 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
         if len(d_region[r][j]) == 0 : continue
         else :
             os.system(f" > FitResults/{filestr}/FitParam_{r}_{era}.txt")
-            file = TFile(f"Files/{filestr}/{era}.root")
+            file = TFile(f"Files/{filestr}/{era}_Data.root")
             hist = file.Get(f"{r}_DataDrivenSubtract_All_All")
 
             quadratic = "[0] + [1]*x + [2]*x**2 + [3]*x**3  + [4]*x**4 "
@@ -53,7 +59,11 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             hint0.SetStats(0)
             hint0.SetFillStyle(3005)
 
-            print(f"{fit_results.GetParameter(0)},{fit_results.GetParameter(1)},{fit_results.GetParameter(2)}")
+            logger = "{ "
+
+            if deg == 2 : logger += f"p[0] = {fit_results.GetParameter(0)} ; p[1] = {fit_results.GetParameter(1)} ; p[2] = {fit_results.GetParameter(2)} ;"
+            elif deg == 3 : logger += f"p[0] = {fit_results.GetParameter(0)} ; p[1] = {fit_results.GetParameter(1)} ; p[2] = {fit_results.GetParameter(2)} ;  p[3] = {fit_results.GetParameter(3)} ;"
+            elif deg == 4 : logger += f"p[0] = {fit_results.GetParameter(0)} ; p[1] = {fit_results.GetParameter(1)} ; p[2] = {fit_results.GetParameter(2)} ;  p[3] = {fit_results.GetParameter(3)} ;  p[4] = {fit_results.GetParameter(4)} ;"
             #for i in range(len(params)):
             #    print(fit_results.GetParameter(i))
 
@@ -62,11 +72,14 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             fit_results_tail = hist.GetFunction("g")
 
 
+
             hint = TH1D(f"hint{r}",f"confband{r}",1200,boundary-interval,2000)
             TVirtualFitter.GetFitter().GetConfidenceIntervals(hint,0.68)
             hint.SetStats(0)
             hint.SetFillStyle(3004)
-            print(f",{fit_results_tail.GetParameter(0)}")
+
+            logger += f"tail = {fit_results_tail.GetParameter(0)} ;"
+            if deg < 3 : print(logger+"}")
 
             # Draw the histogram and the fit function
             canvas = TCanvas(f"canvas{r}", "Fitted Histogram",1000,1000)
@@ -86,7 +99,7 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             hist.GetYaxis().SetTitle("FR(#tau_{h})")
             hist.GetXaxis().SetTitleSize(0.05)
             hist.GetYaxis().SetTitleSize(0.05)
-            hist.GetYaxis().SetRangeUser(0,0.65)
+            hist.GetYaxis().SetRangeUser(0,0.75)
             #histerr.Draw("e0")
             hist.Draw("e1")
             drawLatex_Fitter(r,era,"Fake")
@@ -139,8 +152,10 @@ for j, era in enumerate(["2016preVFP","2016postVFP","2016","2017","2018"]):
             output_file = TFile(f"FitResults/{filestr}/FitFunction_{r}_{era}_dim{deg}.root", "RECREATE")
             f.Write()
             g.Write()
-            
-            #x_intersection = combined_func_test.GetMinimumX(250,2000)
+            combined_func_test = TF1("Combined", "abs(f-g)", 190, 1000, 1)
+            x_intersection = combined_func_test.GetMinimumX(250,2000)
+            logger += f"x0 = {x_intersection} ;"
+            if deg == 3 : print(logger+"}")
             #combined_func = TF1("Combined", combinedFit, 190, 1000, 1)  # Define TF1 with range (-10, 10) and 1 parameter
             #combined_func.SetParameter(0, x_intersection) 
             #print(x_intersection)

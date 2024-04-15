@@ -21,9 +21,12 @@ def drawLatex_Fitter(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
     latex.DrawLatex(x2, y2-0.01,f"{lumi} fb^{{-1}} (13 TeV, {era})")
 
     latex.SetTextFont(42)
-    if   region == "BoostedSignalRegionMETInvert"   : region_latex = "Boosted Fake CR"
-    elif region == "ResolvedSignalRegionMETInvert"  : region_latex = "Resolved Fake CR"
+    if "BoostedSignalRegionMETInvert" in region    : region_latex = "Boosted Fake CR"
+    elif "ResolvedSignalRegionMETInvert" in region : region_latex = "Resolved Fake CR"
     elif region == "Inclusive"                      : region_latex = "Inclusive Fake CR"
+
+    if "_ElTau" in region : region_latex += " (e#tau_{h})"
+    elif "_MuTau" in region : region_latex += " (#mu#tau_{h})"
     latex.SetTextSize(0.5*textSize)
     latex.DrawLatex(x1, y1-0.125,f"{region_latex}")
     latex.SetTextSize(0.425*textSize)
@@ -61,9 +64,13 @@ def drawLatex(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
 
     latex.SetTextFont(42)
     latex.SetTextAlign(31)
-    if   region == 0    : region_latex = "Boosted Fake CR"
-    elif region == 1    : region_latex = "Resolved Fake CR"
-    elif region == 2    : region_latex = "Inclusive Fake CR"
+    if "BoostedSignalRegionMETInvert" in region    : region_latex = "Boosted Fake CR"
+    elif "ResolvedSignalRegionMETInvert" in region : region_latex = "Resolved Fake CR"
+    elif region == "Inclusive"                      : region_latex = "Inclusive Fake CR"
+        
+    if "_ElTau" in region : region_latex += " (e#tau_{h})"
+    elif "_MuTau" in region : region_latex += " (#mu#tau_{h})"
+    
     latex.SetTextSize(0.65*textSize)
     
     genstring = ""; genstring2 = ""
@@ -82,6 +89,7 @@ def getLumi(era) :
     era = str(era)
     if era == "2016preVFP" or era ==  "2016a" : return "19.5"
     elif era == "2016postVFP" or era ==  "2016b" : return "16.8"
+    elif era == "2016" : return "35.9"
     elif era == "2017" : return "41.5"
     elif era == "2018" : return "60"
     else : return "error"

@@ -2,13 +2,13 @@ Nevents,True,1,nEvents,nEvents,0,1
 MET,True,50,#slash{E}_{T} (GeV),MET,0.,1000.,[0/50/100/150/225/1000],True
 Tauh_pT,True,50,Leading Hadronic Tau Pt (GeV),Tauh_pT,0.,800.,[0/190/210/230/250/270/320/800],True
 Tauh_Eta,True,4,Leading Hadronic Tau #eta (GeV),Tauh_Eta,-3.,3.,[-3./-2.4/-1.6/-1.0/-0.6/-0.3/0./0.3/0.6/1.0/1.6/2.4/3.0],True
-HighPtLoose/Lepton_0_Pt,True,50,Leading ##LEPTONEX## Pt (GeV),LooseLep0_Pt,0.,1000.,[0/50/100/150/200/250/400/1000],True
-HighPtLoose/Lepton_0_Eta,True,2,Leading ##LEPTONEX## #eta,LooseLep0_Eta,-3.,3.,[-3.0/-2.4/-2.0/-1.6/-1.2/-0.6/0./0.6/1.2/1.6/2.0/2.4/3.0],True
+HighPtTight/Lepton_0_Pt,True,50,Leading ##LEPTONEX## Pt (GeV),LooseLep0_Pt,0.,1000.,[0/50/100/150/200/250/400/1000],True
+HighPtTight/Lepton_0_Eta,True,2,Leading ##LEPTONEX## #eta,LooseLep0_Eta,-3.,3.,[-3.0/-2.4/-2.0/-1.6/-1.2/-0.6/0./0.6/1.2/1.6/2.0/2.4/3.0],True
 nFatJet,True,1,Number of AK8 Jets,nAK8,0.,10.
 nLooseLeptons,True,1,Number of ##LEPTONEX##,nLep,0.,3.,[0/1/2/3],True
-Mthll,True,200,m_{eff}(#tau_{h}##LEPTON##) [GeV],Mtl,0.,1500.,[0/50/100/150/250/300/350/400/450/500/550/600/650/700/1000/1500],True
-Mthllmet,True,200,m_{eff}(#tau_{h}##LEPTON##+#slash{E}_{T}) [GeV],Mtl_MET,0.,1500.,[0/50/100/150/300/350/400/450/500/550/750/1000/1500],True
-BoostedWR_withMET,True,200,m_{eff}(#tau_{h}##LEPTON##J+#slash{E}_{T}) [GeV],ProperMeffWR_withMET,0.,5000.,[0/250/500/750/1000/1250/1750/5000],True
+Mthlt,True,200,m_{eff}(#tau_{h}##LEPTON##) [GeV],Mtl,0.,1500.,[0/50/100/150/250/300/350/400/450/500/550/600/650/700/1000/1500],True
+Mthltmet,True,200,m_{eff}(#tau_{h}##LEPTON##+#slash{E}_{T}) [GeV],Mtl_MET,0.,1500.,[0/50/100/150/300/350/400/450/500/550/750/1000/1500],True
+ResolvedWR_withMET,True,200,m_{eff}(#tau_{h}##LEPTON##jj+#slash{E}_{T}) [GeV],ProperMeffWR_withMET,0.,5000.,[0/250/500/750/1000/1250/1750/5000],True
 ProperMeffWR,True,200,m_{eff}(#tau_{h}##LEPTON##J) [GeV],ProperMeffWR,0.,5000.,[0/250/500/750/1000/1250/1750/5000],True
 ProperMTWR,True,200,m_{T}(#tau_{h}##LEPTON##J) [GeV],ProperMTWR,0.,1000.,[0/50/100/150/250/1000],True
 dRl0tau,True,3,#DeltaR(l,#tau_{h}),dRl0tau,0.,6.
