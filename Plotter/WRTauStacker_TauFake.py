@@ -125,18 +125,18 @@ for region in l_regions :
             #f"{region}/Cutflow" : [True,1,"Cutflow","Cutflow",0,10],
             f"{region}/MET" : [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,225,1000],True],
             f"{region}/Tauh_pT" : [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,800],True],
-            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],True],
+            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],False],
             #f"{region}/Jets/FatJet_0_Pt" : [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,2500.,[0,100,200,300,400,500,600,700,800,900,1000,2500],True],
             #f"{region}/Jets/FatJet_0_Eta" : [True,2,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.],
             #f"{region}/Jets/FatJet_0_LSF" : [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.],
             f"{region}/Jets/Jet_0_Pt" : [True,100,"Leading AK4 Jet Pt (GeV)","AK4j0_Pt",0.,1000.,[0,40,100,200,300,400,1000],True],
-            f"{region}/Jets/Jet_0_Eta" : [True,2,"Leading AK4 Jet #eta","AK4j0_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],True],
+            f"{region}/Jets/Jet_0_Eta" : [True,2,"Leading AK4 Jet #eta","AK4j0_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],False],
             f"{region}/Jets/Jet_1_Pt" : [True,50,"Subleading AK4 Jet Pt (GeV)","AK4j1_Pt",0.,1000.,[0,40,80,120,180,300,1000],True],
-            f"{region}/Jets/Jet_1_Eta" : [True,5,"Subleading AK4 Jet #eta","AK4j1_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.4,0.,0.4,1.0,1.6,2.4,3.0],True],
+            f"{region}/Jets/Jet_1_Eta" : [True,5,"Subleading AK4 Jet #eta","AK4j1_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.4,0.,0.4,1.0,1.6,2.4,3.0],False],
             f"{region}/HighPtTight/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,350,500,1000],True],
-            f"{region}/HighPtTight/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","TightLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
+            f"{region}/HighPtTight/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","TightLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False],
             f"{region}/HighPtLoose/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,100,150,200,250,400,1000],True],
-            f"{region}/HighPtLoose/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","LooseLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
+            f"{region}/HighPtLoose/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","LooseLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False],
             f"{region}/nFatJet" : [True,1,"Number of AK8 Jets","nAK8",0.,10.],
             f"{region}/nJets" : [True,1,"Number of AK4 Jets","nAK4",0.,10.],
             f"{region}/nBJets" : [True,1,"Number of b-Tagged AK4 Jets","nbAK4",0.,10.],
@@ -158,7 +158,7 @@ for region in l_regions :
             VarDic[f"{region}/FatJet/Pt"]         = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,550,1000],True]
             VarDic[f"{region}/FatJet/Mass"]       = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,150,500],True]
             VarDic[f"{region}/FatJet/SDMass"]     = [True,1,"Leading AK8 Jet Soft Drop Mass [GeV]","AK8J0_SDMass",0.,500.,[0,40,90,150,500],True]
-            VarDic[f"{region}/FatJet/Eta"]        = [True,1,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True]
+            VarDic[f"{region}/FatJet/Eta"]        = [True,1,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False]
             VarDic[f"{region}/FatJet/LSF"]        = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
             VarDic[f"{region}/FatJet/dRJtau"]     = [True,3,"#DeltaR(J_{lead},#tau_{h})","dRtauAK8",0.,6.]
             if "LowMassControlRegion" in region : 
@@ -199,7 +199,7 @@ for region in l_regions :
 
         for var in VarDic : 
 
-            hastobeBlinded = len(VarDic[var]) == 8 
+            hastobeBlinded = (len(VarDic[var]) == 8) and VarDic[var][7]
             blindbins =[]
             if hastobeBlinded : blindbins = VarDic[var][6][:len(VarDic[var][6])//2]
 
@@ -246,7 +246,10 @@ for region in l_regions :
                 else :
                     if samplename == "Fakes" :
                         h1 = f.Get(f"WRTau_SignalSingleTauTrg/vJetVVVLoose_vEl{vEl}_vMu{vMu}/{var}") 
-                        if not h1 == None : h1.Scale(getTauFakeNormalization(args.era,region))
+                        if not h1 == None : 
+                            #print(f"Fake : {h1.Integral()}")
+                            h1.Scale(getTauFakeNormalization(args.era,region))
+                            #print(f"Fake : {h1.Integral()}")
                         h2 = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__NonPromptLepton/{TauID}/{var}") 
                         h = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
                     else : h = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__PromptLepton/{TauID}/{var}")
@@ -272,8 +275,11 @@ for region in l_regions :
                 h_tmp_HS.SetStats(0); h_tmp_HS.SetFillColorAlpha(SampleDic[samplename][1],0.95); h_tmp_HS.SetLineColor(kBlack)
                 hs.Add(h_tmp_HS)
                 l.AddEntry(h_tmp_HS,SampleDic[samplename][0],"f")
+                #print(f"{i} {h_stack.Integral()}")
                 i += 1
+                #if "Nevents" in var : print(f"{samplename} : {h.Integral()}")
 
+            if "Nevents" in var : print(f"Total : {h_stack.Integral()}")
             # hs          : THStack
             # h_stack     : envelope TH1D of hs 
             # h_tmp_HS    : temp TH1D for calling h_stack

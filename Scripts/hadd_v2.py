@@ -15,7 +15,7 @@ samplegroup_noskim = {
 
 
 samplegroup_skim = {
-    "VVV" : ["WWW","WWZ","WZZ","ZZZ"],
+    "VVV" : ["WWW*","WWZ*","WZZ*","ZZZ*"],
     "VV" : ["WW_*","WZ_*","ZZ_*"],
     "ST" : ["SingleTop*","ST*"],
     "TT" : ["TT*"],
@@ -42,7 +42,7 @@ def GetSKOutDir(analyzername,era) :
 
 def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
-    if era == "2017" : samplegroup_skim["ST"] = ["SingleTop*"]
+    if era == "2017" or "2016" in era : samplegroup_skim["ST"] = ["SingleTop*"]
     elif era == "2018" : samplegroup_skim["ST"] = ["ST*"]
 
     hasSkim = skim is not ''
@@ -84,7 +84,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
     for V in ["W","DY"] :
         if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}/{era}")
-        else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG.root ../RootFiles/{outdir}/{era}/{basename}_{V}Jets_MG.root")
+        else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG*.root ../RootFiles/{outdir}/{era}/{basename}_{V}Jets_MG.root")
 
     # Boson Hadd
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_VVV.root ../RootFiles/{outdir}/{era}/{basename}_VV.root ../RootFiles/{outdir}/{era}/{basename}_DYJets_MG.root ../RootFiles/{outdir}/{era}/{basename}_WJets_MG.root")
@@ -95,7 +95,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
 
     # Data Driven ResEl-Tau Fake
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenElTau.root {GetSKOutDir(basename,era)}/ResolvedElectronChannelFake__/DATA/{analyzername}_Tau*")
+    #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenElTau.root {GetSKOutDir(basename,era)}/ResolvedElectronChannelFake__/DATA/{analyzername}_Tau*")
 
     # Lepton MC Fake
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_QCD.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
