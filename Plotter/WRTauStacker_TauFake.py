@@ -30,7 +30,7 @@ print(f"Divide Fakes : {args.dividefakes}")
 
 bst_remove = ["Tight","Jets/Jet","AK4"]
 rsv_remove = ["Loose","FatJet"]
-presel_remove = ["ProperMTWR","ProperMeffWR"]
+presel_remove = ["ProperMTWR","ProperMeffWR","HighPt"]
 
 debug = args.debugmode
 willBlind = args.blind
@@ -62,6 +62,9 @@ d_signals = {
     4800 : [50000,TColor.GetColor("#00FFD1")],
 }
 
+l_SignalRegions = ["ResolvedSignalRegion_ElTau","ResolvedSignalRegion_MuTau",
+                   "BoostedSignalRegion_ElTau", "BoostedSignalRegion_MuTau"]
+
 
 userflag = ""; savedirsuffix = ""
 if args.userflags != "" : 
@@ -89,10 +92,16 @@ SampleDic = {
 l_regions_presels = ["ResolvedSignalRegionMETInvert",
                      "ResolvedLowMassControlRegion"]
 
-l_regions_presels = ["BoostedPreselection","ResolvedPreselection"]
+l_regions_presels = ["BoostedPreselection"]#,"ResolvedPreselection"]
 
 l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
+
+l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
+l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
+                     "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
+
+l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
 
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_ElTau","_MuTau"]] # ,"_ElTau", "_MuTau"
 
@@ -151,9 +160,9 @@ for region in l_regions :
             VarDic = remove_keys_containing_strings(VarDic,bst_remove)
             VarDic[f"{region}/Mthll"]             = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}) [GeV]","Mtl",0.,1500.,[0,50,100,150,250,300,350,400,450,500,550,600,650,700,1000,1500],True]
             VarDic[f"{region}/Mthllmet"]          = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}+#slash{{E}}_{{T}}) [GeV]","Mtl_MET",0.,1500.,[0,50,100,150,300,350,400,450,500,550,750,1000,1500],True]
-            VarDic[f"{region}/BoostedWR_withMET"] = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR_withMET",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMTWR"]        = [True,200,f"m_{{T}}(#tau_{{h}}{lep}J) [GeV]","ProperMTWR",0.,1000.,[0,50,100,150,250,1000],True]
+            #VarDic[f"{region}/BoostedWR_withMET"] = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR_withMET",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
+            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
+            VarDic[f"{region}/ProperMTWR"]        = [True,200,f"m_{{T}}(#tau_{{h}}J) [GeV]","ProperMTWR",0.,1000.,[0,50,100,150,250,1000],True]
             #VarDic[f"{region}/dRl0tau"]           = [True,3,"#DeltaR(l,#tau_{h})","dRl0tau",0.,6.]
             VarDic[f"{region}/FatJet/Pt"]         = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,550,1000],True]
             VarDic[f"{region}/FatJet/Mass"]       = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,150,500],True]
@@ -176,7 +185,8 @@ for region in l_regions :
             #VarDic[f"{region}/ResolvedWR"]        = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}jj) [GeV]","WRnoMET",0.,4000.,[0,250,300,500,750,1000,1250,1500,1750,2000,2500,3000,4000],True]
             VarDic[f"{region}/Mthlt"]             = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}) [GeV]","Mtl",0.,1500.,[0,100,200,300,400,500,600,1500],True]
             VarDic[f"{region}/Mthltmet"]          = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}+#slash{{E}}_{{T}}) [GeV]","Mtl_MET",0.,1500.,[0,150,250,350,450,550,650,750,850,1500],True]
-            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}jj) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
+            #VarDic[f"{region}/BoostedWR_withMET"] = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR_withMET",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
+            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}jj+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
             VarDic[f"{region}/ProperMTWR"]        = [True,200,f"m_{{T}}(#tau_{{h}}{lep}jj) [GeV]","ProperMTWR",0.,800.,[0,50,100,150,200,500],True]
             VarDic[f"{region}/dRtj0"]             = [True,3,"#DeltaR(j_{lead},#tau_{h})","dRtauj0",0.,6.]
             VarDic[f"{region}/dRtj1"]             = [True,3,"#DeltaR(j_{sublead},#tau_{h})","dRtauj1",0.,6.]
@@ -187,18 +197,22 @@ for region in l_regions :
                 VarDic[f"{region}/Tauh_pT"]                 = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,370,800],True]
                 VarDic[f"{region}/HighPtTight/Lepton_0_Pt"] = [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,300,350,400,600],True]
 
-        if "LowMassControlRegion" in region : # ProperMTWR < 250
-            VarDic[f"{region}/ProperMTWR"] = [True,10,f"m_{{T}}(#tau_{{h}}{lep}{jetstring}) [GeV]","ProperMTWR",0.,250.,[0,50,100,150,200,250],True]
+        if "LowMassControlRegion" in region : # ProperMTWR < 450
+            VarDic[f"{region}/ProperMTWR"] = [True,10,f"m_{{T}}(#tau_{{h}}{lep}{jetstring}) [GeV]","ProperMTWR",0.,450.,[0,50,100,150,200,250,300,350,400,450],True]
 
         if "ElTau" in region : channel = "e#tau_{h}"
         elif "MuTau" in region : channel = "#mu#tau_{h}"
         else : channel = "e#tau_{h}+#mu#tau_{h}"
 
         #print(SampleDic)
-        if "Preselection" in region : VarDic = remove_keys_containing_strings(VarDic,presel_remove)
+        if "Preselection" in region : 
+            VarDic = remove_keys_containing_strings(VarDic,presel_remove)
+            if "Boosted" in region :
+                VarDic[f"{region}/Jets/FatJet_0_LSF"] = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
 
         for var in VarDic : 
 
+            print(var)
             hastobeBlinded = (len(VarDic[var]) == 8) and VarDic[var][7]
             blindbins =[]
             if hastobeBlinded : blindbins = VarDic[var][6][:len(VarDic[var][6])//2]
@@ -235,24 +249,24 @@ for region in l_regions :
                 if divfake :
                     if samplename == "DataDrivenTau" :
                         if fakev : 
-                            h = f.Get(f"WRTau_SignalSingleTauTrg_TauFRWtVarDeg3/vJetVVVLoose_vEl{vEl}_vMu{vMu}/{var}")
+                            h = f.Get(f"Central_TauFRWtVarDeg3/{var}")
                             TauFakeNormalization = TauFakeNormalization_deg3 
-                        else : h = f.Get(f"WRTau_SignalSingleTauTrg/vJetVVVLoose_vEl{vEl}_vMu{vMu}/{var}") 
-                        if not h == None : 
+                        else : h = f.Get(f"Central/{var}") 
+                        if not h == None and region not in l_SignalRegions: 
                             h.Scale(getTauFakeNormalization(args.era,region))
                     elif samplename == "MCLeptonFake"  :
-                        h = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__NonPromptLepton/{TauID}/{var}") 
-                    else : h = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__PromptLepton/{TauID}/{var}")
+                        h = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
+                    else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
                 else :
                     if samplename == "Fakes" :
-                        h1 = f.Get(f"WRTau_SignalSingleTauTrg/vJetVVVLoose_vEl{vEl}_vMu{vMu}/{var}") 
-                        if not h1 == None : 
+                        h1 = f.Get(f"Central/{var}") 
+                        if not h1 == None and region not in l_SignalRegions : 
                             #print(f"Fake : {h1.Integral()}")
                             h1.Scale(getTauFakeNormalization(args.era,region))
                             #print(f"Fake : {h1.Integral()}")
-                        h2 = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__NonPromptLepton/{TauID}/{var}") 
+                        h2 = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
                         h = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
-                    else : h = f.Get(f"WRTau_SignalSingleTauTrg__PromptTau__PromptLepton/{TauID}/{var}")
+                    else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
                 if h == None : continue
                 if debug : print(f"{samplename} hist : {h}")
                 gROOT.cd()
@@ -268,7 +282,7 @@ for region in l_regions :
                 h_tmp_HS.GetYaxis().SetMaxDigits(2); h_tmp_ratio.GetYaxis().SetMaxDigits(2)
                 h_tmp_HS.GetXaxis().SetLabelSize(0); h_tmp_ratio.GetXaxis().SetLabelSize(0)
                 h_tmp_HS.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5]); h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                h_tmp_HS.Scale(1.08); h_tmp_ratio.Scale(1.08)
+                #h_tmp_HS.Scale(1.08); h_tmp_ratio.Scale(1.08)
                 if i == 0 :
                     h_stack = h_tmp_ratio.Clone()
                 else : h_stack.Add(h_tmp_ratio)
@@ -337,7 +351,7 @@ for region in l_regions :
             h_stackerr.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
             h_stackerr.GetXaxis().SetLabelSize()
             f_data = TFile(f"{SampleDir}/{args.era}/DATA/{args.analyzername}_DATA.root")
-            h_data_tmp = f_data.Get(f"WRTau_SignalSingleTauTrg/{TauID}/{var}")
+            h_data_tmp = f_data.Get(f"Central/{var}")
             if h_data_tmp == None : continue
             if debug : print(f"DATA file : {f_data}")
             if debug : print(h_data_tmp)
@@ -525,7 +539,7 @@ for region in l_regions :
                     if "Boosted" in region : mn = 200
                     elif "Resolved" in region : mn = mwr-100    
                     f_signal = TFile(f"{os.getenv('WRTau_Output')}/{args.input}/{args.era}/Signals/{args.analyzername}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
-                    h_signal_tmp = f_signal.Get(f"WRTau_SignalSingleTauTrg/{TauID}/{var}")
+                    h_signal_tmp = f_signal.Get(f"Central/{var}")
                     if h_signal_tmp == None : continue
                     h_signal_tmp.SetDirectory(0)
                     #print(h_signal_tmp)
@@ -537,7 +551,7 @@ for region in l_regions :
                     
                     h_signal.SetDirectory(0)
                     h_signal.SetStats(0)
-                    h_signal.Scale(getNormalization(args.era,mwr,mn))
+                    h_signal.Scale(0.01*getNormalization(args.era,mwr,mn))
                     scalelabel = "{:.2f}".format(getNormalization(args.era,mwr,mn))
                     h_signal.SetLineColor(d_signals[mwr][1])
                     h_signal.SetLineWidth(3)

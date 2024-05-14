@@ -1,12 +1,4 @@
 DYJets_MG
-QCD_Pt_1400to1800
-QCD_Pt_1800to2400
-QCD_Pt_2400to3200
-QCD_Pt_300to470
-QCD_Pt_3200toInf
-QCD_Pt_470to600
-QCD_Pt_600to800
-QCD_Pt_800to1000
 ST_sch_4f_lepdecays_TauHLT
 ST_tch_antitop_4f_inclusivedecays_TauHLT
 ST_tch_top_4f_inclusivedecays_TauHLT

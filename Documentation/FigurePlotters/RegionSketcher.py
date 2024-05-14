@@ -34,7 +34,7 @@ cut_y.SetTextSize(0.045)
 cut_y.SetTextFont(42)
 cut_y.Draw()
 
-cut_x = ROOT.TLatex(0.42, 0.05, "450")
+cut_x = ROOT.TLatex(0.42, 0.05, "250")
 #cut_y.SetTextAngle(90)
 cut_x.SetTextSize(0.045)
 cut_x.SetTextFont(42)

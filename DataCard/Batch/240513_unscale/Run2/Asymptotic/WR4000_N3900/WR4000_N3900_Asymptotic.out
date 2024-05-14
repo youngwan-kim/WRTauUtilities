@@ -1,0 +1,14 @@
+ <<< Combine >>> 
+ <<< v9.2.1 >>>
+>>> Random number generator seed is 123456
+Will use a-priori instead of a-posteriori expected background.
+>>> Method used is AsymptoticLimits
+
+ -- AsymptoticLimits ( CLs ) --
+Expected  2.5%: r < 2.8433
+Expected 16.0%: r < 15.3689
+Expected 50.0%: r < 323.5000
+Expected 84.0%: r < 651.0292
+Expected 97.5%: r < 981.1171
+
+Done in 0.01 min (cpu), 0.01 min (real)

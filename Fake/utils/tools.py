@@ -28,9 +28,9 @@ def drawLatex_Fitter(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
     if "_ElTau" in region : region_latex += " (e#tau_{h})"
     elif "_MuTau" in region : region_latex += " (#mu#tau_{h})"
     latex.SetTextSize(0.5*textSize)
-    latex.DrawLatex(x1, y1-0.125,f"{region_latex}")
+    latex.DrawLatex(x1, y1-0.175,f"{region_latex}")
     latex.SetTextSize(0.425*textSize)
-    latex.DrawLatex(x1, y1-0.15,"(#eta Inclusive , #AK4 Inclusive)")
+    latex.DrawLatex(x1, y1-0.2,"(#eta Inclusive , #AK4 Inclusive)")
 
 
 def drawTagLatex(eta,nj,x=.875,y=.815) :
