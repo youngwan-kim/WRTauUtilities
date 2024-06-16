@@ -2,6 +2,22 @@ from ROOT import *
 from . import variables
 import array,os
 
+def check(root_file, histogram_name):
+
+    if not root_file or root_file.IsZombie():
+        print("Error: Unable to open file:", file_name)
+        return False
+
+    histogram = root_file.Get(histogram_name)
+
+    if histogram:
+        #print("Histogram", histogram_name, "exists in the file.")
+        return True
+    else:
+        #print("Histogram", histogram_name, "does not exist in the file.")
+        return False
+
+
 def drawLatex_Fitter(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
     latex = TLatex()
     latex.SetNDC()

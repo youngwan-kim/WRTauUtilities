@@ -1,6 +1,7 @@
+#!/usr/bin/python3
 import os
 
-tag = "240513"
+tag = "240525"
 
 
 signals = {

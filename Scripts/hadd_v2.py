@@ -103,6 +103,9 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Top.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root")
 
     # Data Driven Tau Fake
+    #fakeDir = f"../RootFiles/{outdir}/{era}/FakeTMP"
+    #os.system(f"mkdir -p {fakeDir}")
+    #os.system(f"cp {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau* {fakeDir}")
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
 
     # Data Driven ResEl-Tau Fake
@@ -112,6 +115,8 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_QCD.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root")
 
+    # VVVL Prompt
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_LooseTauPrompt.root {hadddir}/LooseTauPrompt__/*")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hadd output files from WRTauAnalyzer')

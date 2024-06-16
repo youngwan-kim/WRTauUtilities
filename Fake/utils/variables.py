@@ -1,6 +1,7 @@
 d_geoTag = {"All" : "#eta Inclusive",
-            "B"   : "|#eta|<1.479",
-            "EC"  : "|#eta|>1.479"}
+            #"B"   : "|#eta|<1.479",
+            #"EC"  : "|#eta|>1.479"
+            }
 
 d_njtag = {"All" : "#AK4 Inclusive",
            #"0"   : "#AK4 = 0",

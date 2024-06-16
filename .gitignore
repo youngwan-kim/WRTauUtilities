@@ -168,3 +168,4 @@ Fake/Files/*
 Fake/FitResults/*
 Fake/Inputs/*
 CombineTools/*
+Plotter/report.py

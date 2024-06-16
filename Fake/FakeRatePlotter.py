@@ -2,7 +2,7 @@ from ROOT import *
 from utils import *
 import array,os
 
-stamp = "20240415_160115"
+stamp = "20240603_181309"
 filename = f"TauFake_{stamp}"
 savestr = filename.split("_",1)[1]
 #f_fake = TFile(f"Inputs/{stamp}/{filename}.root")
@@ -28,32 +28,32 @@ d_ptbins  = {
 
     "tag"                                      : "BinOptv2_FlavourSplit",
     "Inclusive_2016"                           : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_2016"        : [0,190,210,230,270,310,335,400,450,550,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
-    "ResolvedSignalRegionMETInvert_2016"       : [0,190,230,270,320,360,400,480,525,1000],
-    "Inclusive_2017"                           : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_2017"        : [0,190,210,230,270,300,330,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
-    "ResolvedSignalRegionMETInvert_2017"       : [0,190,210,230,270,300,320,350,380,450,1000],#[0,190,230,270,320,360,400,480,1000],
-    "Inclusive_2018"                           : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_2018"        : [0,190,210,230,270,310,335,400,450,550,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
-    "ResolvedSignalRegionMETInvert_2018"       : [0,190,230,270,320,360,400,480,525,1000],
-    "Inclusive_ElTau_2016"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_ElTau_2016"  : [0,190,200,210,220,240,280,320,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
-    "ResolvedSignalRegionMETInvert_ElTau_2016" : [0,190,210,230,250,270,300,350,400,500,1000],
-    "Inclusive_ElTau_2017"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_ElTau_2017"  : [0,190,200,210,220,240,280,320,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
-    "ResolvedSignalRegionMETInvert_ElTau_2017" : [0,190,210,230,250,270,300,350,400,1000],
-    "Inclusive_ElTau_2018"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_ElTau_2018"  : [0,190,210,230,270,310,350,400,500,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
-    "ResolvedSignalRegionMETInvert_ElTau_2018" : [0,190,210,230,250,270,290,310,330,350,375,400,1000],
-    "Inclusive_MuTau_2016"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_MuTau_2016"  : [0,190,200,210,220,230,240,310,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
-    "ResolvedSignalRegionMETInvert_MuTau_2016" : [0,190,210,230,250,270,290,310,350,400,550,1000],
-    "Inclusive_MuTau_2017"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_MuTau_2017"  : [0,190,200,210,220,230,240,310,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
-    "ResolvedSignalRegionMETInvert_MuTau_2017" : [0,190,210,230,250,270,290,310,330,350,400,450,550,1000],#[0,190,230,270,320,360,400,480,1000],
-    "Inclusive_MuTau_2018"                     : [0] + list(range(190, 1500, 10)),
-    "BoostedSignalRegionMETInvert_MuTau_2018"  : [0,190,200,210,220,230,250,270,290,310,330,350,375,400,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
-    "ResolvedSignalRegionMETInvert_MuTau_2018" : [0,190,210,230,250,270,290,310,330,350,370,390,410,450,550,1000]#[0,190,230,270,320,360,400,480,525,1000]
+    "BoostedSignalRegionMETInvertMTSame_2016"        : [0,150,190,210,230,270,310,335,400,450,550,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
+    "ResolvedSignalRegionMETInvertMTSame_2016"       : [0,150,190,230,270,320,360,400,480,525,1000],
+    "Inclusive_2017"                                 : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_2017"        : [0,190,210,230,270,300,330,380,450,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvertMTSame_2017"       : [0,190,210,230,270,300,320,350,380,450,1000],#[0,190,230,270,320,360,400,480,1000],
+    "Inclusive_2018"                                 : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_2018"        : [0,190,210,230,270,310,335,400,450,550,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
+    "ResolvedSignalRegionMETInvertMTSame_2018"       : [0,190,230,270,320,360,400,480,525,1000],
+    "Inclusive_ElTau_2016"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2016"  : [0,150,170,190,210,230,250,300,350,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2016" : [0,150,170,190,210,230,250,300,350,1000],
+    "Inclusive_ElTau_2017"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2017"  : [0,190,210,230,275,350,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2017" : [0,190,250,350,1000],
+    "Inclusive_ElTau_2018"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2018"  : [0,190,210,230,270,335,400,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2018" : [0,190,250,400,1000],
+    "Inclusive_MuTau_2016"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2016"  : [0,150,190,250,300,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2016" : [0,150,170,190,210,230,250,300,350,1000],
+    "Inclusive_MuTau_2017"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2017"  : [0,190,250,350,1000], # gof 0.93 deg 2 = [0,190,210,230,270,300,330,380,450,1000] #[0,190,210,230,270,310,340,380,450,1000]
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2017" : [0,190,220,250,300,400,1000],#[0,190,230,270,320,360,400,480,1000],
+    "Inclusive_MuTau_2018"                           : [0] + list(range(190, 1500, 10)),
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2018"  : [0,190,250,400,1000], # gof 1.06 deg 2 [0,190,210,230,270,310,335,360,380,400,450,500,1000]
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2018" : [0,190,220,250,300,400,1000]#[0,190,230,270,320,360,400,480,525,1000]
     # [0,190,210,230,250,270,300,320,340,360,400,480,525,1500]
 
 }
@@ -72,25 +72,26 @@ d_ptbins_PR = {
     "Inclusive_MuTau_2016"                     : [0,190,220,250,350,1000],
     "Inclusive_MuTau_2017"                     : [0,190,220,250,350,1000],
     "Inclusive_MuTau_2018"                     : [0,190,220,250,350,1000],
-    "BoostedSignalRegionMETInvert_2016"        : [0,190,220,250,350,1000], 
-    "ResolvedSignalRegionMETInvert_2016"       : [0,190,220,250,350,1000],
-    "BoostedSignalRegionMETInvert_2017"        : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_2017"       : [0,190,220,250,350,1000],
-    "BoostedSignalRegionMETInvert_2018"        : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_2018"       : [0,190,220,250,350,1000],
-    "BoostedSignalRegionMETInvert_ElTau_2016"  : [0,190,220,270,1000],
-    "ResolvedSignalRegionMETInvert_ElTau_2016" : [0,190,210,250,1000],
-    "BoostedSignalRegionMETInvert_ElTau_2017"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_ElTau_2017" : [0,190,210,250,350,1000],
-    "BoostedSignalRegionMETInvert_ElTau_2018"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_ElTau_2018" : [0,190,210,270,300,1000],
-    "BoostedSignalRegionMETInvert_MuTau_2016"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_MuTau_2016" : [0,190,220,300,1000],
-    "BoostedSignalRegionMETInvert_MuTau_2017"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_MuTau_2017" : [0,190,220,300,1000],
-    "BoostedSignalRegionMETInvert_MuTau_2018"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvert_MuTau_2018" : [0,190,220,250,350,1000],
-    # [0,190,210,230,250,270,300,320,340,360,400,480,525,1500]
+    "BoostedSignalRegionMETInvertMTSame_2016"        : [0,150,250,1000], 
+    "ResolvedSignalRegionMETInvertMTSame_2016"       : [0,190,220,250,350,1000],
+    "BoostedSignalRegionMETInvertMTSame_2017"        : [0,190,220,250,350,1000],
+    "ResolvedSignalRegionMETInvertMTSame_2017"       : [0,190,220,250,350,1000],
+    "BoostedSignalRegionMETInvertMTSame_2018"        : [0,190,220,250,350,1000],
+    "ResolvedSignalRegionMETInvertMTSame_2018"       : [0,190,220,250,350,1000],
+    ####
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2016"  : [0,150,1000],
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2016" : [0,150,250,1000],
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2017"  : [0,190,350,1000],
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2017" : [0,190,350,1000],
+    "BoostedSignalRegionMETInvertMTSame_ElTau_2018"  : [0,190,250,350,1000],
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2018" : [0,190,210,1000],
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2016"  : [0,150,300,1000],
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2016" : [0,150,200,1000],
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2017"  : [0,190,220,250,350,1000],
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2017" : [0,190,200,1000],
+    "BoostedSignalRegionMETInvertMTSame_MuTau_2018"  : [0,190,1000],
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2018" : [0,190,220,250,350,1000],
+    ####
 
 }
 
@@ -99,26 +100,32 @@ savestr += f"_{d_ptbins['tag']}"
 l_subtract = ["Subtract"]
 
 
+
 l_subtract = ["NonSubtract"]
 l_subtract = ["Subtract"]
 
+isnoDY = False
+dytag = ""
+if isnoDY : dytag = "_noDY"
+
 for era in ["2016","2017","2018"]:
     k = 0
-    os.system(f"mkdir -p Plots/{savestr}/{era}")
-    os.system(f"mkdir -p Files/{savestr}")
-    for genmatch in ["Data"]:
+    os.system(f"mkdir -p Plots/{savestr}{dytag}/{era}")
+    os.system(f"mkdir -p Files/{savestr}{dytag}")
+    for genmatch in ["Prompt"]:
     #for genmatch in ["Prompt"]: # Switch for prompt rate 
-        output_file = TFile(f"Files/{savestr}/{era}_{genmatch}.root", "RECREATE")
+        output_file = TFile(f"Files/{savestr}{dytag}/{era}_{genmatch}.root", "RECREATE")
         isDataDriven = genmatch == "Data"
         isPromptRate = genmatch == "Prompt"
-        f_fake = TFile(f"Inputs/{stamp}/{era}/{filename}.root")
+        os.system(f"mkdir -p Plots/{savestr}{dytag}/{era}/Prompt")
+        f_fake = TFile(f"Inputs/{stamp}/{era}/{filename}{dytag}.root")
         if isDataDriven : 
             f_fake   = TFile(f"Inputs/{stamp}/{era}/Data/{filename}.root")
-            f_prompt = TFile(f"Inputs/{stamp}/{era}/{filename}.root")
+            f_prompt = TFile(f"Inputs/{stamp}/{era}/{filename}{dytag}.root")
         for eta in d_geoTag :
             for nj in d_njtag :
                 for lep in ["","_ElTau","_MuTau"] : #["","_ElTau","_MuTau"]
-                    for i,r in enumerate(["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert"]) : #["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert"]
+                    for i,r in enumerate(["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]) : #["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert"]
                         if isPromptRate : d_ptbins = d_ptbins_PR
                         #print(d_ptbins)
                         c = TCanvas("","",1000,1000)
@@ -126,26 +133,21 @@ for era in ["2016","2017","2018"]:
                         if h_loose_tmp :
                             h_loose = h_loose_tmp.Rebin(len(d_ptbins[f"{r}{lep}_{era}"])-1,f"loose{r}",array.array('d',d_ptbins[f"{r}{lep}_{era}"]))
                             h_loose.SetDirectory(0)
-                        else : continue
                         h_tight_tmp = f_fake.Get(f"WRTauFake/{r}{lep}/{genmatch}/TauPt_Tight_{eta}_{nj}")
                         if h_tight_tmp :
                             h_tight = h_tight_tmp.Rebin(len(d_ptbins[f"{r}{lep}_{era}"])-1,f"tight{r}",array.array('d',d_ptbins[f"{r}{lep}_{era}"]))
                             h_tight.SetDirectory(0)
-                        else : continue
                         if isDataDriven : 
                             h_loose_prompt_tmp = f_prompt.Get(f"WRTauFake/{r}{lep}/Prompt/TauPt_Loose_{eta}_{nj}")
                             if h_loose_prompt_tmp :
                                 h_loose_prompt = h_loose_prompt_tmp.Rebin(len(d_ptbins[f"{r}{lep}_{era}"])-1,f"ddps_loose{r}",array.array('d',d_ptbins[f"{r}{lep}_{era}"]))
                                 h_loose_prompt.SetDirectory(0)
-                            else : continue
                             h_tight_prompt_tmp = f_prompt.Get(f"WRTauFake/{r}{lep}/Prompt/TauPt_Tight_{eta}_{nj}")
                             if h_tight_prompt_tmp :
                                 h_tight_prompt = h_tight_prompt_tmp.Rebin(len(d_ptbins[f"{r}{lep}_{era}"])-1,f"ddps_tight{r}",array.array('d',d_ptbins[f"{r}{lep}_{era}"]))
                                 h_tight_prompt.SetDirectory(0)
-                            else : continue
-                            if k == 0 :
-                                h_loose = h_loose - h_loose_prompt 
-                                h_tight = h_tight - h_tight_prompt
+                            h_loose = h_loose - h_loose_prompt 
+                            h_tight = h_tight - h_tight_prompt
                         h_fr = h_tight.Clone(f"{r}{lep}_{d_genmatch[genmatch]}{l_subtract[k]}_{eta}_{nj}")
                         h_fr.Divide(h_tight,h_loose,1,1,'B')
                         original_directory = gDirectory.GetPath()
@@ -178,10 +180,17 @@ for era in ["2016","2017","2018"]:
                         drawLatex(f"{r}_{lep}",era,genmatch)
                         drawTagLatex(eta,nj)
                         c.Update()
-                        drawLine(h_fr)
-                        c.Update()
-                        c.SaveAs(f"Plots/{savestr}/{era}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.png")
-                        c.SaveAs(f"Plots/{savestr}/{era}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.pdf")
+                        if isPromptRate :
+                            line = TLine(0,1,1000,1)
+                            line.SetLineStyle(3)
+                            line.SetLineWidth(2)
+                            line.Draw("same")
+                            c.Update()
+                            c.SaveAs(f"Plots/{savestr}{dytag}/{era}/Prompt/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.png")
+                            c.SaveAs(f"Plots/{savestr}{dytag}/{era}/Prompt/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.pdf")
+                        else :
+                            c.SaveAs(f"Plots/{savestr}{dytag}/{era}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.png")
+                            c.SaveAs(f"Plots/{savestr}{dytag}/{era}/Tau{d_genmatch[genmatch]}{l_subtract[k]}_{r}{lep}_{eta}_{nj}.pdf")
 
 
                 h_loose_1 = f_fake.Get(f"WRTauFake/BoostedSignalRegionMETInvert/{genmatch}/TauPt_Loose_{eta}_{nj}")

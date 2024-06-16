@@ -2,6 +2,7 @@
 import os,argparse,glob
 from itertools import product
 from datetime import datetime
+#from ROOT import *
 
 samplegroup = {}
 
@@ -80,6 +81,15 @@ def HADDnGet(analyzername,era,flag,outdir,skim) :
         else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG.root ../RootFiles/{outdir}/{era}/{basename}_{V}Jets_MG.root")
 
     # Data Driven Tau Fake
+    # First go through fit error propagation
+
+    '''
+    for f_fake in os.listdir(fakeDir):
+        file_path = os.path.join(fakeDir, f_fake)
+        if os.path.isfile(file_path):
+            f = TFile(file_path)
+    '''
+
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
 
     # Signals

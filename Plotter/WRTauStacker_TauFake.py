@@ -101,7 +101,7 @@ l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
 l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
-l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
+#l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
 
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_ElTau","_MuTau"]] # ,"_ElTau", "_MuTau"
 
@@ -270,7 +270,7 @@ for region in l_regions :
                 if h == None : continue
                 if debug : print(f"{samplename} hist : {h}")
                 gROOT.cd()
-                if len(VarDic[var]) == 7 : 
+                if len(VarDic[var]) == 8 : 
                     h_tmp_HS = h.Clone(f"{region}_{TauID}_{var}_{samplename}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
                     h_tmp_ratio = h.Clone(f"{region}_{TauID}_{var}_{samplename}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
                 elif hastobeBlinded :
@@ -282,7 +282,12 @@ for region in l_regions :
                 h_tmp_HS.GetYaxis().SetMaxDigits(2); h_tmp_ratio.GetYaxis().SetMaxDigits(2)
                 h_tmp_HS.GetXaxis().SetLabelSize(0); h_tmp_ratio.GetXaxis().SetLabelSize(0)
                 h_tmp_HS.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5]); h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                #h_tmp_HS.Scale(1.08); h_tmp_ratio.Scale(1.08)
+                if samplename == "Fakes" :
+                    for i in range(1,h_tmp_HS.GetNbinsX()) :
+                        err0 = h_tmp_HS.GetBinError(i)
+                        err1 = GetFakeFitErr(args.input,args.era,var,VarDic,i)
+                        err = sqrt(err0**2 + err1**2)
+                        h_tmp_HS.SetBinError(i,err)
                 if i == 0 :
                     h_stack = h_tmp_ratio.Clone()
                 else : h_stack.Add(h_tmp_ratio)

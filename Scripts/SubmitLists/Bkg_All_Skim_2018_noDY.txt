@@ -1,0 +1,15 @@
+ST_sch_4f_lepdecays_TauHLT
+ST_tch_antitop_4f_inclusivedecays_TauHLT
+ST_tch_top_4f_inclusivedecays_TauHLT
+ST_tW_antitop_5f_nofullhaddec_TauHLT
+ST_tW_top_5f_nofullhaddec_TauHLT
+TTJJ_TauHLT
+TTLJ_TauHLT
+TTLL_TauHLT
+WW_TauHLT
+WWW
+WWZ
+WZ_TauHLT
+WZZ
+ZZ_TauHLT
+ZZZ
