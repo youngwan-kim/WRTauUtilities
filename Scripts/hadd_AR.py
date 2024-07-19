@@ -10,7 +10,6 @@ samplegroup_noskim = {
     "VV" : ["WW_TauHLT","WZ_TauHLT","ZZ_TauHLT"],
     "ST" : [],
     "TT" : [],
-    "QCD" : [],
 }
 
 
@@ -19,7 +18,6 @@ samplegroup_skim = {
     "VV" : ["WW_*","WZ_*","ZZ_*"],
     "ST" : ["SingleTop*","ST*"],
     "TT" : ["TT*"],
-    "QCD" : ["QCD*"],
 }
 
 signals = {
@@ -75,59 +73,22 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
         samplegroup = samplegroup_skim
     else : samplegroup = samplegroup_noskim
 
-    #Signals
-    for mwr in signals :
-        for mn in signals[mwr] :
-            os.system(f"cp {hadddir}/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/Signals/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
-    if onlysignals : return
-    
     #Data
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/DATA/{basename}_DATA.root {GetSKOutDir(basename,era)}/{flagstr}/DATA/{analyzername}_Tau*")
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/DATA/{basename}_DATA.root {GetSKOutDir(basename,era)}/RunApplicationRegion__/DATA/{analyzername}_Tau*")
     # Prompt HADD
     for sample in samplegroup :
         if len(samplegroup[sample]) > 0 :
             haddstr = ""
             haddstr_AR = ""
             for name in samplegroup[sample] :
-                haddstr += f"{hadddir}/{analyzername}_{name}.root "
                 haddstr_AR += f"{hadddir}/RunApplicationRegion__/{analyzername}_{name}.root " 
-            os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {haddstr}")
             os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {haddstr_AR}")
 
         else : 
-            os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
             os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {hadddir}/RunApplicationRegion__/{analyzername}_{sample}*Tau*")
 
-    for V in ["W","DY"] :
-        if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}/{era}")
-        else : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG*.root ../RootFiles/{outdir}/{era}/{basename}_{V}Jets_MG.root")
 
-    # Boson Hadd
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_VVV.root ../RootFiles/{outdir}/{era}/{basename}_VV.root ../RootFiles/{outdir}/{era}/{basename}_DYJets_MG.root ../RootFiles/{outdir}/{era}/{basename}_WJets_MG.root")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Boson_noVJets.root ../RootFiles/{outdir}/{era}/{basename}_VVV.root ../RootFiles/{outdir}/{era}/{basename}_VV.root")
-    # Top
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Top.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root")
-
-    # Data Driven Tau Fake
-    #fakeDir = f"../RootFiles/{outdir}/{era}/FakeTMP"
-    #os.system(f"mkdir -p {fakeDir}")
-    #os.system(f"cp {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau* {fakeDir}")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_PromptFakes.root {GetSKOutDir(basename,era)}/TauFake__PromptTau__/*")
-
-
-    # Data Driven ResEl-Tau Fake
-    #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenElTau.root {GetSKOutDir(basename,era)}/ResolvedElectronChannelFake__/DATA/{analyzername}_Tau*")
-
-    # Lepton MC Fake
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_QCD.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root")
-
-    # VVVL Prompt
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_LooseTauPrompt.root {hadddir}/LooseTauPrompt__/*.root")
-    # VVVL Data
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/DATA/{basename}_LooseData.root {hadddir}/LooseTauPrompt__/DATA/*.root")
-
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_Prompt.root ../RootFiles/{outdir}/{era}/AR/{basename}_*.root ")
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Hadd output files from WRTauAnalyzer')

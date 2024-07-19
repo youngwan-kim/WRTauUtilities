@@ -1,0 +1,17 @@
+imax *  number of channels
+jmax *  number of backgrounds
+kmax *  number of nuisance parameters (sources of systematical uncertainties)
+------------
+shapes * *  /data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Outputs/##ERA##/WR##mwr##_N##mn##_card_input.root $PROCESS $PROCESS_$SYSTEMATIC
+------------
+bin           cr_FakeLoose  cr_FakeTight  cr_SRLoose    sr
+observation 
+------------
+bin           cr_FakeLoose  cr_FakeLoose  cr_FakeTight  cr_FakeTight  cr_SRLoose  cr_SRLoose  sr       sr 
+process       prompt        fake          prompt        fake          prompt      fake        prompt   fake          
+process       1             2             1             2             1           2           1        2             
+rate          -1            1             -1            1             -1          1           -1       1             
+------------
+norm1   rateParam   cr_FakeLoose    fake  1
+norm2   rateParam   cr_FakeTight    fake  1
+norm3   rateParam   cr_SRLoose      fake  1

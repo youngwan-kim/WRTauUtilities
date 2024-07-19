@@ -2,7 +2,7 @@ from ROOT import *
 from utils import *
 import array,os
 
-stamp = "20240603_181309"
+stamp = "20240623_232843"
 filename = f"TauFake_{stamp}"
 savestr = filename.split("_",1)[1]
 #f_fake = TFile(f"Inputs/{stamp}/{filename}.root")
@@ -84,11 +84,11 @@ d_ptbins_PR = {
     "BoostedSignalRegionMETInvertMTSame_ElTau_2017"  : [0,190,350,1000],
     "ResolvedSignalRegionMETInvertMTSame_ElTau_2017" : [0,190,350,1000],
     "BoostedSignalRegionMETInvertMTSame_ElTau_2018"  : [0,190,250,350,1000],
-    "ResolvedSignalRegionMETInvertMTSame_ElTau_2018" : [0,190,210,1000],
+    "ResolvedSignalRegionMETInvertMTSame_ElTau_2018" : [0,190,1000],
     "BoostedSignalRegionMETInvertMTSame_MuTau_2016"  : [0,150,300,1000],
     "ResolvedSignalRegionMETInvertMTSame_MuTau_2016" : [0,150,200,1000],
     "BoostedSignalRegionMETInvertMTSame_MuTau_2017"  : [0,190,220,250,350,1000],
-    "ResolvedSignalRegionMETInvertMTSame_MuTau_2017" : [0,190,200,1000],
+    "ResolvedSignalRegionMETInvertMTSame_MuTau_2017" : [0,190,1000],
     "BoostedSignalRegionMETInvertMTSame_MuTau_2018"  : [0,190,1000],
     "ResolvedSignalRegionMETInvertMTSame_MuTau_2018" : [0,190,220,250,350,1000],
     ####
@@ -108,7 +108,7 @@ isnoDY = False
 dytag = ""
 if isnoDY : dytag = "_noDY"
 
-for era in ["2016","2017","2018"]:
+for era in ["2016preVFP","2016postVFP","2017","2018"]:
     k = 0
     os.system(f"mkdir -p Plots/{savestr}{dytag}/{era}")
     os.system(f"mkdir -p Files/{savestr}{dytag}")
@@ -124,7 +124,7 @@ for era in ["2016","2017","2018"]:
             f_prompt = TFile(f"Inputs/{stamp}/{era}/{filename}{dytag}.root")
         for eta in d_geoTag :
             for nj in d_njtag :
-                for lep in ["","_ElTau","_MuTau"] : #["","_ElTau","_MuTau"]
+                for lep in ["_ElTau","_MuTau"] : #["","_ElTau","_MuTau"]
                     for i,r in enumerate(["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]) : #["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert"]
                         if isPromptRate : d_ptbins = d_ptbins_PR
                         #print(d_ptbins)

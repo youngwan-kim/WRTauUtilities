@@ -82,7 +82,7 @@ SampleDir = f"{os.getenv('WRTau_Output')}/{args.input}"
 
 SampleDic = {
 
-    "Boson" : ["Others",TColor.GetColor("#576CBC")],
+    "Boson_noVJets" : ["Others",TColor.GetColor("#576CBC")],
     "Top" : ["t#bar{t}+tX", TColor.GetColor("#DE1A1A")],
     "Fakes" : ["Nonprompt",TColor.GetColor("#5FAD56")]
 
@@ -98,7 +98,7 @@ l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInve
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
 l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
-l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
+l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame",
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
 #l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
@@ -134,7 +134,7 @@ for region in l_regions :
             #f"{region}/Cutflow" : [True,1,"Cutflow","Cutflow",0,10],
             f"{region}/MET" : [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,225,1000],True],
             f"{region}/Tauh_pT" : [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,800],True],
-            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],False],
+            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-5.,5.,[-5.,-2.1,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.1,5.0],False],
             #f"{region}/Jets/FatJet_0_Pt" : [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,2500.,[0,100,200,300,400,500,600,700,800,900,1000,2500],True],
             #f"{region}/Jets/FatJet_0_Eta" : [True,2,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.],
             #f"{region}/Jets/FatJet_0_LSF" : [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.],
@@ -245,6 +245,7 @@ for region in l_regions :
             for samplename in SampleDic :
                 if debug : print(f"{i} : {samplename}")
                 f = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_{samplename}.root")
+                fPromptFake = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_PromptFakes.root")
                 if debug : print(f"{samplename} file : {f}")
                 if divfake :
                     if samplename == "DataDrivenTau" :
@@ -260,12 +261,15 @@ for region in l_regions :
                 else :
                     if samplename == "Fakes" :
                         h1 = f.Get(f"Central/{var}") 
-                        if not h1 == None and region not in l_SignalRegions : 
-                            #print(f"Fake : {h1.Integral()}")
-                            h1.Scale(getTauFakeNormalization(args.era,region))
-                            #print(f"Fake : {h1.Integral()}")
+                        #if not h1 == None and region not in l_SignalRegions : 
+                        #    print(f"Fake : {h1.Integral()}")
+                        #    h1.Scale(getTauFakeNormalization(args.era,region))
+                        #    print(f"Fake : {h1.Integral()}")
                         h2 = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
-                        h = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
+                        h3 = fPromptFake.Get(f"Central/{var}")
+                        h_ = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
+                        h = h_ - h3 if h3 is not None else h_ 
+                        h.Scale(getTauFakeNormalization(args.era,region))
                     else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
                 if h == None : continue
                 if debug : print(f"{samplename} hist : {h}")
@@ -285,9 +289,18 @@ for region in l_regions :
                 if samplename == "Fakes" :
                     for i in range(1,h_tmp_HS.GetNbinsX()) :
                         err0 = h_tmp_HS.GetBinError(i)
-                        err1 = GetFakeFitErr(args.input,args.era,var,VarDic,i)
+                        #err1 = GetFakeFitErr(args.input,args.era,var,VarDic,i)
+                        err1 = h_tmp_HS.GetBinContent(i)
+                        print(err0,err1)
                         err = sqrt(err0**2 + err1**2)
+                        print(err)
                         h_tmp_HS.SetBinError(i,err)
+                    for i in range(1,h_tmp_ratio.GetNbinsX()) :
+                        err0 = h_tmp_ratio.GetBinError(i)
+                        err1 = h_tmp_ratio.GetBinContent(i)
+                        err2 = GetFakeFitErr(args.input,args.era,var,VarDic,i)*getTauFakeNormalization(args.era,region)
+                        err = sqrt(err0**2 + err1**2 + err2**2)
+                        h_tmp_ratio.SetBinError(i,err)
                 if i == 0 :
                     h_stack = h_tmp_ratio.Clone()
                 else : h_stack.Add(h_tmp_ratio)
@@ -298,7 +311,7 @@ for region in l_regions :
                 i += 1
                 #if "Nevents" in var : print(f"{samplename} : {h.Integral()}")
 
-            if "Nevents" in var : print(f"Total : {h_stack.Integral()}")
+            #if "Nevents" in var : print(f"Total : {h_stack.Integral()}")
             # hs          : THStack
             # h_stack     : envelope TH1D of hs 
             # h_tmp_HS    : temp TH1D for calling h_stack

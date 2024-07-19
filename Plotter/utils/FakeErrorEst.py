@@ -26,4 +26,3 @@ def GetFakeFitErr(stamp,era,varKey,VarDic,binN) :
     nDown = h_down.GetBinContent(binN)
     return max(nUp-nCentral,nCentral-nDown)
 
-
