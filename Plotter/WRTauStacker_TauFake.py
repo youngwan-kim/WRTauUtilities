@@ -82,9 +82,9 @@ SampleDir = f"{os.getenv('WRTau_Output')}/{args.input}"
 
 SampleDic = {
 
-    "Boson_noVJets" : ["Others",TColor.GetColor("#576CBC")],
+    "Boson_noVJets" : ["Others",TColor.GetColor("#5790fc")],
     "Top" : ["t#bar{t}+tX", TColor.GetColor("#DE1A1A")],
-    "Fakes" : ["Nonprompt",TColor.GetColor("#5FAD56")]
+    "Fakes" : ["Nonprompt",TColor.GetColor("#f89c20")]
 
 }
 
@@ -102,7 +102,9 @@ l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionM
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
 #l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
-
+l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
+#l_regions_presels = ["ResolvedSignalRegionMETInvertMTSame"]
+l_regions_presels = ["BoostedLowMassControlRegion","ResolvedLowMassControlRegion","BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_ElTau","_MuTau"]] # ,"_ElTau", "_MuTau"
 
 print(l_regions)
@@ -134,18 +136,19 @@ for region in l_regions :
             #f"{region}/Cutflow" : [True,1,"Cutflow","Cutflow",0,10],
             f"{region}/MET" : [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,225,1000],True],
             f"{region}/Tauh_pT" : [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,800],True],
-            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-5.,5.,[-5.,-2.1,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.1,5.0],False],
+            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-5.,5.,[-5.,-2.1,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.1,5.0],True],
+            f"{region}/Tauh_DM" : [True,1,"Leading Hadronic Tau Decay Mode","Tauh_DM",0.,15.],
             #f"{region}/Jets/FatJet_0_Pt" : [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,2500.,[0,100,200,300,400,500,600,700,800,900,1000,2500],True],
             #f"{region}/Jets/FatJet_0_Eta" : [True,2,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.],
             #f"{region}/Jets/FatJet_0_LSF" : [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.],
             f"{region}/Jets/Jet_0_Pt" : [True,100,"Leading AK4 Jet Pt (GeV)","AK4j0_Pt",0.,1000.,[0,40,100,200,300,400,1000],True],
-            f"{region}/Jets/Jet_0_Eta" : [True,2,"Leading AK4 Jet #eta","AK4j0_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],False],
+            f"{region}/Jets/Jet_0_Eta" : [True,2,"Leading AK4 Jet #eta","AK4j0_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],True],
             f"{region}/Jets/Jet_1_Pt" : [True,50,"Subleading AK4 Jet Pt (GeV)","AK4j1_Pt",0.,1000.,[0,40,80,120,180,300,1000],True],
-            f"{region}/Jets/Jet_1_Eta" : [True,5,"Subleading AK4 Jet #eta","AK4j1_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.4,0.,0.4,1.0,1.6,2.4,3.0],False],
+            f"{region}/Jets/Jet_1_Eta" : [True,5,"Subleading AK4 Jet #eta","AK4j1_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.4,0.,0.4,1.0,1.6,2.4,3.0],True],
             f"{region}/HighPtTight/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,350,500,1000],True],
-            f"{region}/HighPtTight/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","TightLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False],
+            f"{region}/HighPtTight/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","TightLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
             f"{region}/HighPtLoose/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,100,150,200,250,400,1000],True],
-            f"{region}/HighPtLoose/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","LooseLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False],
+            f"{region}/HighPtLoose/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","LooseLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
             f"{region}/nFatJet" : [True,1,"Number of AK8 Jets","nAK8",0.,10.],
             f"{region}/nJets" : [True,1,"Number of AK4 Jets","nAK4",0.,10.],
             f"{region}/nBJets" : [True,1,"Number of b-Tagged AK4 Jets","nbAK4",0.,10.],
@@ -167,7 +170,7 @@ for region in l_regions :
             VarDic[f"{region}/FatJet/Pt"]         = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,550,1000],True]
             VarDic[f"{region}/FatJet/Mass"]       = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,150,500],True]
             VarDic[f"{region}/FatJet/SDMass"]     = [True,1,"Leading AK8 Jet Soft Drop Mass [GeV]","AK8J0_SDMass",0.,500.,[0,40,90,150,500],True]
-            VarDic[f"{region}/FatJet/Eta"]        = [True,1,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],False]
+            VarDic[f"{region}/FatJet/Eta"]        = [True,1,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True]
             VarDic[f"{region}/FatJet/LSF"]        = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
             VarDic[f"{region}/FatJet/dRJtau"]     = [True,3,"#DeltaR(J_{lead},#tau_{h})","dRtauAK8",0.,6.]
             if "LowMassControlRegion" in region : 
@@ -199,6 +202,7 @@ for region in l_regions :
 
         if "LowMassControlRegion" in region : # ProperMTWR < 450
             VarDic[f"{region}/ProperMTWR"] = [True,10,f"m_{{T}}(#tau_{{h}}{lep}{jetstring}) [GeV]","ProperMTWR",0.,450.,[0,50,100,150,200,250,300,350,400,450],True]
+            VarDic[f"{region}/ProperMEffWR"] = [True,10,f"m_{{Eff}}(#tau_{{h}}{lep}{jetstring}) [GeV]","ProperMEffWR",0.,900.,[0,100,200,300,400,500,600,700,800,900],True]
 
         if "ElTau" in region : channel = "e#tau_{h}"
         elif "MuTau" in region : channel = "#mu#tau_{h}"
@@ -254,7 +258,8 @@ for region in l_regions :
                             TauFakeNormalization = TauFakeNormalization_deg3 
                         else : h = f.Get(f"Central/{var}") 
                         if not h == None and region not in l_SignalRegions: 
-                            h.Scale(getTauFakeNormalization(args.era,region))
+                            #h.Scale(getTauFakeNormalization(args.era,region))
+                            h.Scale(1.)
                     elif samplename == "MCLeptonFake"  :
                         h = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
                     else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
@@ -267,9 +272,9 @@ for region in l_regions :
                         #    print(f"Fake : {h1.Integral()}")
                         h2 = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
                         h3 = fPromptFake.Get(f"Central/{var}")
-                        h_ = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
-                        h = h_ - h3 if h3 is not None else h_ 
-                        h.Scale(getTauFakeNormalization(args.era,region))
+                        h = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
+                        #h = h_ - h3 if h3 is not None else h_ 
+                        #h.Scale(getTauFakeNormalization(args.era,region))
                     else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
                 if h == None : continue
                 if debug : print(f"{samplename} hist : {h}")
@@ -286,81 +291,50 @@ for region in l_regions :
                 h_tmp_HS.GetYaxis().SetMaxDigits(2); h_tmp_ratio.GetYaxis().SetMaxDigits(2)
                 h_tmp_HS.GetXaxis().SetLabelSize(0); h_tmp_ratio.GetXaxis().SetLabelSize(0)
                 h_tmp_HS.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5]); h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                if samplename == "Fakes" :
-                    for i in range(1,h_tmp_HS.GetNbinsX()) :
-                        err0 = h_tmp_HS.GetBinError(i)
-                        #err1 = GetFakeFitErr(args.input,args.era,var,VarDic,i)
-                        err1 = h_tmp_HS.GetBinContent(i)
-                        print(err0,err1)
+                h_tmp_ratio_statonly = h_tmp_ratio.Clone(f"{region}_{TauID}_{var}_{samplename}_h_tmp_ratio_statonly")
+                
+                if samplename != "Fakes" : 
+                    for j in range(1,h_tmp_HS.GetNbinsX()+1) :
+                        err0 = h_tmp_HS.GetBinError(j)
+                        err1 = GetTotalSystError(args.input,samplename,args.era,var,VarDic,j)
                         err = sqrt(err0**2 + err1**2)
-                        print(err)
-                        h_tmp_HS.SetBinError(i,err)
-                    for i in range(1,h_tmp_ratio.GetNbinsX()) :
-                        err0 = h_tmp_ratio.GetBinError(i)
-                        err1 = h_tmp_ratio.GetBinContent(i)
-                        err2 = GetFakeFitErr(args.input,args.era,var,VarDic,i)*getTauFakeNormalization(args.era,region)
-                        err = sqrt(err0**2 + err1**2 + err2**2)
-                        h_tmp_ratio.SetBinError(i,err)
+                        h_tmp_HS.SetBinError(j,err)
+                    for j in range(1,h_tmp_ratio.GetNbinsX()+1) :
+                        err0 = h_tmp_ratio.GetBinError(j)
+                        err1 = GetTotalSystError(args.input,samplename,args.era,var,VarDic,j)
+                        err = sqrt(err0**2 + err1**2)
+                        h_tmp_ratio.SetBinError(j,err)
+                else : 
+                    for j in range(1,h_tmp_HS.GetNbinsX()+1) :
+                        err0 = h_tmp_HS.GetBinError(j)
+                        err1 = GetFakeFitErr(args.input,args.era,var,VarDic,j)
+                        err = sqrt(err0**2 + err1**2)
+                        h_tmp_HS.SetBinError(j,err)
+                    for j in range(1,h_tmp_ratio.GetNbinsX()+1) :
+                        err0 = h_tmp_ratio.GetBinError(j)
+                        err1 = GetFakeFitErr(args.input,args.era,var,VarDic,j)
+                        err = sqrt(err0**2 + err1**2)
+                        h_tmp_ratio.SetBinError(j,err)
+
                 if i == 0 :
-                    h_stack = h_tmp_ratio.Clone()
-                else : h_stack.Add(h_tmp_ratio)
+                    h_stack          = h_tmp_ratio.Clone()
+                    h_stack_statonly = h_tmp_ratio_statonly.Clone()
+                else : 
+                    h_stack.Add(h_tmp_ratio)
+                    h_stack_statonly.Add(h_tmp_ratio_statonly)
                 h_tmp_HS.SetStats(0); h_tmp_HS.SetFillColorAlpha(SampleDic[samplename][1],0.95); h_tmp_HS.SetLineColor(kBlack)
                 hs.Add(h_tmp_HS)
                 l.AddEntry(h_tmp_HS,SampleDic[samplename][0],"f")
-                #print(f"{i} {h_stack.Integral()}")
                 i += 1
-                #if "Nevents" in var : print(f"{samplename} : {h.Integral()}")
 
-            #if "Nevents" in var : print(f"Total : {h_stack.Integral()}")
-            # hs          : THStack
-            # h_stack     : envelope TH1D of hs 
-            # h_tmp_HS    : temp TH1D for calling h_stack
-            # h_tmp_ratio : temp TH1D for ratio derivation (=hist of h_stack) 
-            '''
-            for branch in branchlist :
-                j = 0 ; k = 0 
-                for samplename in SampleDic : 
-                    f = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_{samplename}.root")
-                    h = f.Get(f"WRTau_SignalSingleTauTrg{branch}/{TauID}/{var}")
-                    if h == None :
-                        k += 1
-                        continue
-                    gROOT.cd()
-                    print(f"{samplename} : {h.Integral()}")
-                    if len(VarDic[var]) == 7 : 
-                        h_tmp_HS = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
-                        h_tmp_ratio = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
-                    elif hastobeBlinded :
-                        h_tmp_HS = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
-                        h_tmp_ratio = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
-                    else : 
-                        h_tmp_HS = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(VarDic[var][1])
-                        h_tmp_ratio = h.Clone(f"{region}_{TauID}_{var}_{samplename}{branch}_hist_clone").Rebin(VarDic[var][1])
-                    h_tmp_ratio.GetYaxis().SetMaxDigits(2)
-                    h_tmp_ratio.GetXaxis().SetLabelSize(0)
-                    h_tmp_ratio.Scale(1.08)
-                    h_tmp_ratio.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                    h_tmp_HS.SetFillColorAlpha(SampleDic_NP[branch][1],0.95); h_tmp_HS.SetLineColor(kBlack)
-                    #print(f"{j} {branch} {samplename} {SampleDic_NP[branch][1]}")
-                    if j == 0 :
-                        h_tmp_HS_NP = h_tmp_HS.Clone(f"HS_{region}_{TauID}_{var}_{samplename}{branch}_hist_clone")
-                    else :
-                        h_tmp_HS_NP += h_tmp_HS
-                    h_stack.Add(h_tmp_ratio)
-                    j += 1
-                #print(f"{branch} loop , h_tmp_HS_NP : {h_tmp_HS_NP}")
-                if k == len(SampleDic) : continue
-                else :  
-                    h_tmp_HS_NP.GetYaxis().SetMaxDigits(2)
-                    h_tmp_HS_NP.GetXaxis().SetLabelSize(0) 
-                    h_tmp_HS_NP.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                    h_tmp_HS_NP.Scale(1.08)
-                    hs.Add(h_tmp_HS_NP)
-                    l.AddEntry(h_tmp_HS_NP,SampleDic_NP[branch][0],"lf")
-                    h_stack.GetXaxis().SetLabelSize(0)
-                    h_stack.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-                if debug : print(f"THStack : {h_stack}")
-            '''
+            # Cheat sheet 
+            # 
+            # hs               : THStack
+            # - h_tmp_HS              : temp TH1D for calling h_stack
+            # h_stack          : envelope TH1D of hs = Pred. Unc (stat+syst)
+            # - h_tmp_ratio           : temp TH1D for ratio derivation (stat+syst) (=hist of h_stack) 
+            # h_stack_statonly : envelope TH1D of hs (only stat error) = Pred. Unc (stat) = not drawn seperately
+            # - h_tmp_ratio_statonly  : temp TH1D for ratio derivation (stat) 
             
             h_stackerr = h_stack.Clone(f"{region}_{TauID}_{var}_hserr")
             h_stackerr.SetStats(0)
@@ -397,23 +371,21 @@ for region in l_regions :
             h_data.GetXaxis().SetLabelSize(0)
             #if hastobeBlinded : h_data.GetXaxis().SetRangeUser(VarDic[var][4],VarDic[var][6][:len(VarDic[var][6])//2][-1]) #TEST
             h_data.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
-            l.AddEntry(h_stackerr,"Pred. Stat.","f")
-            l.AddEntry(h_data,"Obs.+Stat.","lp")
-            h_data_error = h_data.Clone(f"{region}_{TauID}_{var}_DATA_err_clone")
-            h_data_error.SetFillColorAlpha(12,0.6)
-            h_data_error.SetFillStyle(3144)
-            h_data_error.GetXaxis().SetLabelSize(0)
-            h_data_error.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
+            l.AddEntry(h_stackerr,"Pred. Unc.","f")
+            l.AddEntry(h_data,"Obs.+ Unc.","lep")
             #if "SignalRegion" in region or "Preselection" in region :
             #    if "Invert" not in region :
             #        for i in range(1,h_data.GetNbinsX()+1):
             #            h_data.SetBinContent(i,0.0)
             ratio = h_data.Clone(f"{region}_{TauID}_{var}_ratio")
-            data = h_stack.Clone(f"{region}_{TauID}_{var}_datapoints") #swap
-            ratio.Divide(data)
-            ratio.SetStats(0)
-            if debug : print(ratio)
             ratio_stat = ratio.Clone(f"{region}_{TauID}_{var}_ratio_stat")
+            data = h_stack.Clone(f"{region}_{TauID}_{var}_datapoints") #swap
+            data_statonly = h_stack_statonly.Clone(f"{region}_{TauID}_{var}_datapoints_statonly")
+            ratio.Divide(data)
+            ratio_stat.Divide(data_statonly)
+            ratio.SetStats(0)
+            ratio_stat.SetStats(0)
+            if debug : print(ratio)
             ratio_syst = ratio.Clone(f"{region}_{TauID}_{var}_ratio_syst")
 
             for r in [ratio,ratio_stat,ratio_syst] :
@@ -422,7 +394,7 @@ for region in l_regions :
                 r.GetXaxis().SetTitleSize(0.15)
                 r.GetXaxis().SetLabelSize(0.125)
                 r.GetXaxis().SetTitleOffset(0.85)
-                r.GetYaxis().SetRangeUser(0,2)
+                r.GetYaxis().SetRangeUser(0,2.5)
                 r.GetYaxis().SetLabelSize(0.1)
                 r.GetYaxis().SetTitle("Obs./Pred.")
                 r.GetYaxis().SetTitleSize(0.125)
@@ -440,20 +412,34 @@ for region in l_regions :
                         ratio_syst.SetBinError(ibin,0.)
             
             
-            ratio.GetXaxis().UnZoom();ratio_syst.GetXaxis().UnZoom()
+            ratio.GetXaxis().UnZoom();ratio_syst.GetXaxis().UnZoom();ratio_stat.GetXaxis().UnZoom()
    
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 ratio_syst.SetBinContent(i, 1.0)
 
-            # Systematic Errors
+            for i in range(1, ratio_stat.GetNbinsX() + 1):
+                ratio_stat.SetBinContent(i, 1.0)
+
+
+            # Systematic Errors : globally scaled systematic errors
+            dummy = 0.2
             for i in range(1, ratio_syst.GetNbinsX() + 1):
-                ratio_syst.SetBinError(i, sqrt(getLumiSyst(args.era)**2 + 0.3**2 + ratio.GetBinError(i)**2))
+                #print(GetFakeFitErr_Syst(args.input,args.era,var,VarDic,i))
+                ratio_syst.SetBinError(i,  sqrt(ratio.GetBinError(i)**2+dummy**2)   )
 
             ratio_syst.SetStats(0)
-            ratio_syst.SetFillColorAlpha(kAzure-4,0.6)
+            ratio_syst.SetFillColor(TColor.GetColor('#fc9272'))
             ratio_syst.SetFillStyle(1001)
-            ratio_syst.SetMarkerStyle(kDot)
+            ratio_syst.SetMarkerStyle(20)
+            ratio_syst.SetMarkerColorAlpha(kBlack,0)
             
+            ratio_stat.SetStats(0)
+            ratio_stat.SetFillColor(TColor.GetColor('#fee0d2'))
+            ratio_stat.SetFillStyle(1001)
+            ratio_stat.SetMarkerStyle(20)
+            ratio_stat.SetMarkerColorAlpha(kBlack,0)
+            
+
             l_max = [] ; l_max.append(hs.GetMaximum()) ; l_max.append(h_data.GetMaximum())
             pad_up.cd()
             h_data.GetYaxis().SetRangeUser(0,max(l_max)*1.8)
@@ -475,11 +461,12 @@ for region in l_regions :
             textSize = 0.625*gStyle.GetPadTopMargin()
             latex.SetTextFont(61)
             latex.SetTextSize(textSize*1.5)
-            latex.DrawLatex(0.15, 0.785,"CMS")
+            latex.DrawLatex(0.15, 0.795,"CMS")
 
             latex.SetTextFont(52)
             latex.SetTextSize(0.7*textSize)
-            latex.DrawLatex(0.15, 0.74,"Work In Progress")
+            latex.DrawLatex(0.15, 0.75,"Work In Progress")
+            latex.DrawLatex(0.15, 0.715,"Preliminary")
 
             latex.SetTextFont(42)
             latex.SetTextSize(0.6*textSize)
@@ -499,13 +486,14 @@ for region in l_regions :
                 elif args.userflags == "inverseMETcut" : SRdesc = " (Inverse #slash{E}_{T})"
                 elif args.userflags == "NbGt0" : SRdesc = " (N_{b}#geq1)"
                 if "METInvert" in region : 
-                    if "Boosted" in region : region_latex = f"Boosted #tau Fake CR"
-                    elif "Resolved" in region : region_latex = f"Resolved #tau Fake CR"
+                    if "Boosted" in region : region_latex = f"Boosted QCD Fake MR^{{SR-Like}}"
+                    elif "Resolved" in region : region_latex = f"Resolved QCD Fake MR^{{SR-Like}}"
                 elif "LSFInvert" in region : region_latex = "Boosted Muon Fake CR"
                 else :
                     if "Boosted" in region : region_latex = f"Boosted SR{SRdesc}"
                     elif "Resolved" in region : region_latex = f"Resolved SR{SRdesc}"
-            latex.DrawLatex(0.15, 0.68,f"{region_latex}")
+            latex.DrawLatex(0.15, 0.65,f"{region_latex}")
+
 
             metdesc = ""
             #if "MET" in region : 
@@ -513,8 +501,7 @@ for region in l_regions :
             #    metdesc += "(#slash{E}_{T}>"+cutval+"GeV)"
 
             latex.SetTextSize(0.575*textSize)
-            latex.DrawLatex(0.15, 0.65,f"{channel} Channel {metdesc}")
-
+            latex.DrawLatex(0.15, 0.62,f"{channel} Channel {metdesc}")
             #latex.SetTextSize(0.5*textSize)
             #latex.DrawLatex(0.125, 0.9175,f"{TauID}")
 
@@ -524,18 +511,27 @@ for region in l_regions :
 
             pad_down.cd()
 
+
             # legend for ratio pad
-            l3 = TLegend(0.55,0.85,0.9,0.961)
-            l3.SetNColumns(2)
+            l3 = TLegend(0.35,0.8,0.9,0.965)
+            l3.SetNColumns(3)
             l3.SetFillStyle(1001)
             #l3.SetBorderSize(0)
             l3.AddEntry(ratio,"Obs./Pred.","p")
-            l3.AddEntry(ratio_syst,"Stat #oplus Syst. Unc.","lpf")
+            l3.AddEntry(ratio_stat,"Stat. Unc.","lpf")
+            l3.AddEntry(ratio_syst,"Stat. #oplus Syst. Unc.","lpf")
 
             #ratio.Draw("p&hist&e1")
-            ratio_syst.Draw("e2&f") #test ; not real systematic err yet
+            ratio_syst.Draw("e2&f")
+            ratio_stat.Draw("e2&f&same") #test ; not real systematic err yet
             ratio.Draw("p&hist&same")
             l3.Draw()
+
+            latex_down = TLatex()
+            latex_down.SetNDC()
+            latex_down.SetTextFont(52)
+            latex_down.SetTextSize(2.25*textSize)
+            latex_down.DrawLatex(0.125,0.8,"Prefit")
 
             c.cd()
             pad_down.Draw()

@@ -15,3 +15,23 @@ d_genmatch = { "Fake"   : "FR",
                "Prompt" : "PR",
                "Data"   : "DataDriven"
 }
+
+d_DMtag = {
+
+    "0" : "DM0",
+    "1" : "DM1",
+    "10" : "DM10",
+    "11" : "DM11",
+    "1prong" : "DM0 + DM1",
+    "3prong" : "DM10 + DM11"
+
+}
+
+d_DMtag_TT = {
+
+    "0" : "DM0",
+    "1" : "DM1",
+    "10" : "DM10",
+    "11" : "DM11",
+
+}

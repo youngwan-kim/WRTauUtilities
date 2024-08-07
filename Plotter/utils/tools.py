@@ -104,10 +104,10 @@ def center_histogram(h1):
     return h_out
 
 def getLumiSyst(era) :
-    if "2016" in era : return 0.012
-    elif era == "2017" : return 0.023
-    elif era == "2018" : return 0.025
-    elif era == "Run2" : return 0.016
+    if "2016" in era : return 1.012
+    elif era == "2017" : return 1.023
+    elif era == "2018" : return 1.025
+    elif era == "Run2" : return 1.016
 
 def getXsec(mWR,mN) :
     with open(f"{os.getenv('WRTau_Data')}/xsec.csv") as f:

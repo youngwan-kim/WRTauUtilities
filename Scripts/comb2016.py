@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 
-tag = "240627"
+tag = "240805"
 
 signals = {
     2000 : [200,400,600,1000,1400,1800,1900],
@@ -17,7 +17,7 @@ signals = {
 os.system(f"mkdir -p ../RootFiles/{tag}/2016/DATA")
 os.system(f"mkdir -p ../RootFiles/{tag}/2016/Signals")
 
-for sample in ["Boson","Fakes","DataDrivenTau","Top","MCLeptonFake"] :
+for sample in ["Boson_noVJets","PromptFakes","Fakes","DataDrivenTau","Top","MCLeptonFake"] :
     os.system(f"hadd ../RootFiles/{tag}/2016/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016postVFP/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016preVFP/WRTau_Analyzer_{sample}.root")
 
 for mwr in signals :

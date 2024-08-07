@@ -1,0 +1,17 @@
+ST_sch_4f_lepdecays_TauHLT
+ST_tW_antitop_5f_nofullhaddec_TauHLT
+ST_tW_top_5f_nofullhaddec_TauHLT
+ST_tch_antitop_4f_inclusivedecays_TauHLT
+ST_tch_top_4f_inclusivedecays_TauHLT
+TTJJ_TauHLT
+TTLJ_TauHLT
+TTLL_TauHLT
+WW_TauHLT
+WZ_TauHLT
+ZZ_TauHLT
+ZZZ_TauHLT
+WZZ_TauHLT
+WWZ_TauHLT
+WWW_TauHLT
+DYJets_MG_TauHLT
+WJets_MG_TauHLT

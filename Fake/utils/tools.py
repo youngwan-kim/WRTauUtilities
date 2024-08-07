@@ -59,6 +59,15 @@ def drawTagLatex(eta,nj,x=.875,y=.815) :
     latex.SetTextSize(0.425*textSize)
     latex.DrawLatex(x, y-0.095,f"({variables.d_geoTag[eta]} , {variables.d_njtag[nj]})")
 
+def drawTagLatexDM(eta,DM,x=.875,y=.815) :
+    latex = TLatex()
+    latex.SetNDC()
+    latex.SetTextFont(42)
+    latex.SetTextAlign(31)
+    textSize = 0.625*gStyle.GetPadTopMargin()
+    latex.SetTextSize(0.425*textSize)
+    latex.DrawLatex(x, y-0.095,f"({variables.d_geoTag[eta]} , {variables.d_DMtag[DM]})")
+
 
 def drawLatexNew(region,era,DM,x1=0.15,y1=0.8,x2=0.575,y2=0.925):
     latex = TLatex()
@@ -73,7 +82,8 @@ def drawLatexNew(region,era,DM,x1=0.15,y1=0.8,x2=0.575,y2=0.925):
     latex.DrawLatex(x1, y1-0.06,"Work In Progress")
     latex.DrawLatex(x1, y1-0.09,"Preliminary")
     latex.SetTextFont(42)
-    latex.SetTextSize(0.55*textSize)
+    latex.SetTextSize(0.5*textSize)
+    latex.DrawLatex(x1, y1-0.125,f"(Decay Mode = {DM})")
     #lumi = str(getLumi(str(args.era)))
     lumi = getLumi(era)   
     latex.SetTextAlign(33)
@@ -82,10 +92,9 @@ def drawLatexNew(region,era,DM,x1=0.15,y1=0.8,x2=0.575,y2=0.925):
 
     latex.SetTextFont(42)
     #latex.SetTextAlign(31)
-    if "BoostedSignalRegionMETInvert" in region    : region_latex = "Boosted Fake CR"
-    elif "ResolvedSignalRegionMETInvert" in region : region_latex = "Resolved Fake CR"
-    elif "TTFake" in region                         : region_latex = "Top Pair MC Only"
-    elif region == "Inclusive"                      : region_latex = f"Inclusive AR (DM{DM})"
+    if "SignalRegionMETInvert" in region  : region_latex = "QCD Fake MR_{AR-Like}"
+    elif "LowMass" in region              : region_latex = "Low Mass CR_{AR-Like}"
+    elif region == "SignalRegion"         : region_latex = f"Signal Region AR"
         
     if "_ElTau" in region : region_latex += " (e#tau_{h})"
     elif "_MuTau" in region : region_latex += " (#mu#tau_{h})"
@@ -148,14 +157,15 @@ def drawLatex(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
     latex.SetTextSize(0.55*textSize)
     #lumi = str(getLumi(str(args.era)))
     lumi = getLumi(era)
-    latex.DrawLatex(x2, y2-0.01,f"{lumi} fb^{{-1}} (13 TeV, {era})")
-
+    latex.SetTextAlign(33)
+    latex.DrawLatex(0.885, y2+0.0225,f"{lumi} fb^{{-1}} (13 TeV)")
+    latex.SetTextAlign(11)
     latex.SetTextFont(42)
     latex.SetTextAlign(31)
     if "BoostedSignalRegionMETInvert" in region    : region_latex = "Boosted Fake CR"
     elif "ResolvedSignalRegionMETInvert" in region : region_latex = "Resolved Fake CR"
     elif "TTFake" in region                         : region_latex = "Top Pair MC Only"
-    elif region == "Inclusive"                      : region_latex = "Inclusive Fake CR"
+    elif region == "InclusiveQCDMR"                      : region_latex = "Inclusive QCD Fake MR"
         
     if "_ElTau" in region : region_latex += " (e#tau_{h})"
     elif "_MuTau" in region : region_latex += " (#mu#tau_{h})"
@@ -163,11 +173,11 @@ def drawLatex(region,era,genmatch,x1=0.175,y1=0.8,x2=0.575,y2=0.925):
     latex.SetTextSize(0.65*textSize)
     
     genstring = ""; genstring2 = ""
-    if   genmatch == "Fake"   : genstring = "#scale[0.85]{FR(#tau_{h})}" ; genstring2 = "Nonprompt Gen"
+    if   genmatch == "Fake"   : genstring = "#scale[0.85]{FF(#tau_{h})}" ; genstring2 = "Nonprompt Gen"
     elif genmatch == "Prompt" : genstring = "#scale[0.85]{PR(#tau_{h})}" ; genstring2 = "Prompt Gen"
-    elif genmatch == "Data"   : genstring = "#scale[0.85]{FR(#tau_{h})}" 
+    elif genmatch == "Data"   : genstring = "#scale[0.85]{FF(#tau_{h})}" 
     if genmatch == "Fake" or genmatch == "Prompt" : 
-        latex.DrawLatex(x2+0.3, y1+0.015 , genstring+" = #scale[0.55]{#frac{ "+genstring2+" && (VVVLoose && Tight)}{ "+genstring2+" && VVVLoose}}")
+        latex.DrawLatex(x2+0.3, y1+0.015 , genstring+" = #scale[0.55]{#frac{ "+genstring2+" &&  Tight }{ "+genstring2+" && (VVVLoose && !Tight)}}")
     else : 
         latex.DrawLatex(x2+0.3, y1+0.015 , genstring+" = #scale[0.55]{#frac{ N_{Data}^{VVVLoose && Tight} - N_{Prompt MC}^{VVVLoose && Tight} }{  N_{Data}^{VVVLoose} - N_{Prompt MC}^{VVVLoose} }}")
     latex.SetTextSize(0.5*textSize)
@@ -181,6 +191,7 @@ def getLumi(era) :
     elif era == "2016" : return "35.9"
     elif era == "2017" : return "41.5"
     elif era == "2018" : return "60"
+    elif era == "Run2" : return "138"
     else : return "error"
 
 def drawLine(histogram):

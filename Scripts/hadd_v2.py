@@ -60,12 +60,13 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
     if not flag == '' : 
         flagstr = f"{flag}__"
-        outdir = f"{outdir}__{flag}"
+        outdir = f"{outdir}/{flag}"
     else : flagstr = flag
         
     os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/DATA")
     os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/Signals")
     os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/AR/DATA")
+    os.system(f"mkdir -p ../RootFiles/{outdir}/{era}/RunSyst/")
 
     hadddir = f"{GetSKOutDir(analyzername,era)}/{flagstr}"
 
@@ -88,15 +89,20 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
         if len(samplegroup[sample]) > 0 :
             haddstr = ""
             haddstr_AR = ""
+            haddstr_Syst = ""
             for name in samplegroup[sample] :
                 haddstr += f"{hadddir}/{analyzername}_{name}.root "
                 haddstr_AR += f"{hadddir}/RunApplicationRegion__/{analyzername}_{name}.root " 
+                haddstr_AR += f"{hadddir}/RunSyst__/{analyzername}_{name}.root " 
             os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {haddstr}")
-            os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {haddstr_AR}")
+            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {haddstr_AR}")
+            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {haddstr_Syst}")
 
         else : 
             os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
-            os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {hadddir}/RunApplicationRegion__/{analyzername}_{sample}*Tau*")
+            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {hadddir}/RunApplicationRegion__/{analyzername}_{sample}*Tau*")
+            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {hadddir}/RunSyst__/{analyzername}_{sample}*Tau*")
+
 
     for V in ["W","DY"] :
         if not hasSkim : os.system(f"cp {hadddir}/{analyzername}_{V}Jets_MG_TauHLT.root ../RootFiles/{outdir}/{era}")
@@ -137,6 +143,8 @@ if __name__ == '__main__':
     parser.add_argument('--skim'  , type=str , help='Skim name i.e Name if SkimTree_Name' , default = '' )
     parser.add_argument('--analyzername', type=str , help='Analyzer name'  , default = 'WRTau_Analyzer' )
     parser.add_argument('--onlysignals',action='store_true', help='Move only signals' )
+    parser.add_argument('--AR',action='store_true', help='Application Region hadd ' )
+    parser.add_argument('--Syst',action='store_true', help='Application Region hadd ' )
     args = parser.parse_args()
 
     HADDnGet(args.analyzername,args.era,args.flag,args.outdir,args.skim,args.onlysignals)

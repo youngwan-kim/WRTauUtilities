@@ -167,5 +167,6 @@ Fake/*.root
 Fake/Files/*
 Fake/FitResults/*
 Fake/Inputs/*
+Fake/FakeFactorRatio/*
 CombineTools/*
 Plotter/report.py
