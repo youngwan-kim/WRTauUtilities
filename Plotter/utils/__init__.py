@@ -12,3 +12,5 @@ from .tools import TauFakeNormalization
 from .FakeErrorEst import GetFakeFitErr
 from .FakeErrorEst import GetFakeFitErr_Syst
 from .SystUnc import *
+from .SystCalc import *
+from .mallocTop import *

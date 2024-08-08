@@ -12,10 +12,34 @@ observation -1
 # the second 'process' line must have a positive number for backgrounds, and 0 for signal
 # then we list the independent sources of uncertainties, and give their effect (syst. error)
 # on each process and bin
-bin                        sr         sr            sr       
-process                    prompt     fake          signal   
-process                    1          2             -1       
-rate                       -1         -1            -1       
-Lumi                lnN    ##lumi##   ##lumi##      ##lumi## 
-Dummy               lnN    1.3        1.3           1.3      
+bin                           sr         sr            sr       
+process                       prompt     fake          signal   
+process                       1          2             -1       
+rate                          -1         -1            -1       
+Lumi                lnN       ##lumi##   ##lumi##      ##lumi## 
+Dummy               lnN       1.3        1.3           1.3      
+Fake                lnN       -          1.3           -
+JetEn               shape     1          -             1 
+TauEn               shape     1          -             1 
+TauIDSFExt          shape     1          -             1 
+TauIDSFStat         shape     1          -             1 
+TauIDSFSyst         shape     1          -             1 
+TauTriggerSF        shape     1          -             1 
+#JetRes             shape     1          -             1 
+#JetMass            shape     1          -             1 
+#JetMassSmear       shape     1          -             1 
+#MuonRecoSF         shape     1          -             1 
+#MuonIDSF           shape     1          -             1 
+#MuonISOSF          shape     1          -             1 
+#MuonEn             shape     1          -             1 
+#ElectronRecoSF     shape     1          -             1 
+#ElectronIDSF       shape     1          -             1 
+#ElectronTriggerSF  shape     1          -             1 
+#ElectronEn         shape     1          -             1 
+#ElectronRes        shape     1          -             1 
+#BTagSFHTag         shape     1          -             1 
+#BTagSFLTag         shape     1          -             1 
+#METUncl            shape     1          -             1 
+#Prefire            shape     1          -             1 
+#PU                 shape     1          -             1 
 * autoMCStats 0 0 1

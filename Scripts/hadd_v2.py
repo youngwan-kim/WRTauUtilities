@@ -95,13 +95,13 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
                 haddstr_AR += f"{hadddir}/RunApplicationRegion__/{analyzername}_{name}.root " 
                 haddstr_AR += f"{hadddir}/RunSyst__/{analyzername}_{name}.root " 
             os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {haddstr}")
-            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {haddstr_AR}")
-            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {haddstr_Syst}")
+#            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {haddstr_AR}")
+#            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {haddstr_Syst}")
 
         else : 
             os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_{sample}.root {hadddir}/{analyzername}_{sample}*Tau*")
-            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {hadddir}/RunApplicationRegion__/{analyzername}_{sample}*Tau*")
-            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {hadddir}/RunSyst__/{analyzername}_{sample}*Tau*")
+#            if AR : os.system(f"hadd ../RootFiles/{outdir}/{era}/AR/{basename}_{sample}.root {hadddir}/RunApplicationRegion__/{analyzername}_{sample}*Tau*")
+#            if Syst : os.system(f"hadd ../RootFiles/{outdir}/{era}/RunSyst/{basename}_{sample}.root {hadddir}/RunSyst__/{analyzername}_{sample}*Tau*")
 
 
     for V in ["W","DY"] :
@@ -126,7 +126,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenElTau.root {GetSKOutDir(basename,era)}/ResolvedElectronChannelFake__/DATA/{analyzername}_Tau*")
 
     # Lepton MC Fake
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson.root ../RootFiles/{outdir}/{era}/{basename}_QCD.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson_noV.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root")
 
     # VVVL Prompt
