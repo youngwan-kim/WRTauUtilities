@@ -170,3 +170,7 @@ Fake/Inputs/*
 Fake/FakeFactorRatio/*
 CombineTools/*
 Plotter/report.py
+DataCard/Batch
+DataCard/Cards*
+DataCard/Outputs*
+DataCard/Workspaces*
