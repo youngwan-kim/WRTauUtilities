@@ -10,7 +10,6 @@ samplegroup_noskim = {
     "VV" : ["WW_TauHLT","WZ_TauHLT","ZZ_TauHLT"],
     "ST" : [],
     "TT" : [],
-    "QCD" : [],
 }
 
 
@@ -19,7 +18,6 @@ samplegroup_skim = {
     "VV" : ["WW_*","WZ_*","ZZ_*"],
     "ST" : ["SingleTop*","ST*"],
     "TT" : ["TT*"],
-    "QCD" : ["QCD*"],
 }
 
 signals = {
@@ -79,7 +77,7 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     #Signals
     for mwr in signals :
         for mn in signals[mwr] :
-            os.system(f"cp {hadddir}/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/Signals/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
+            os.system(f"cp {hadddir}/RunSyst__/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/Signals/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
     if onlysignals : return
     
     #Data
@@ -119,20 +117,20 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     #os.system(f"mkdir -p {fakeDir}")
     #os.system(f"cp {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau* {fakeDir}")
     os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root {GetSKOutDir(basename,era)}/TauFake__/DATA/{analyzername}_Tau*")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_PromptFakes.root {GetSKOutDir(basename,era)}/TauFake__PromptTau__/*")
+    #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_PromptFakes.root {GetSKOutDir(basename,era)}/TauFake__PromptTau__/*")
 
 
     # Data Driven ResEl-Tau Fake
     #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_DataDrivenElTau.root {GetSKOutDir(basename,era)}/ResolvedElectronChannelFake__/DATA/{analyzername}_Tau*")
 
     # Lepton MC Fake
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson_noV.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root")
+    #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_MCLeptonFake.root ../RootFiles/{outdir}/{era}/{basename}_Boson_noV.root ../RootFiles/{outdir}/{era}/{basename}_TT.root ../RootFiles/{outdir}/{era}/{basename}_ST.root ")
+    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_Fakes.root  ../RootFiles/{outdir}/{era}/{basename}_DataDrivenTau.root ../RootFiles/{outdir}/{era}/{basename}_Boson_noVJets.root ../RootFiles/{outdir}/{era}/{basename}_Top.root")
 
     # VVVL Prompt
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_LooseTauPrompt.root {hadddir}/LooseTauPrompt__/*.root")
+    #os.system(f"hadd ../RootFiles/{outdir}/{era}/{basename}_LooseTauPrompt.root {hadddir}/LooseTauPrompt__/*.root")
     # VVVL Data
-    os.system(f"hadd ../RootFiles/{outdir}/{era}/DATA/{basename}_LooseData.root {hadddir}/LooseTauPrompt__/DATA/*.root")
+    #os.system(f"hadd ../RootFiles/{outdir}/{era}/DATA/{basename}_LooseData.root {hadddir}/LooseTauPrompt__/DATA/*.root")
 
 
 if __name__ == '__main__':

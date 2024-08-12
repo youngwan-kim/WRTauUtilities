@@ -22,6 +22,7 @@ parser.add_argument('--debugmode', action='store_true', help='debug flag')
 parser.add_argument('--onlypng', action='store_true', help='Only save in png')
 parser.add_argument('--dividefakes', action='store_true', help='Divide fake contributions')
 parser.add_argument('--fakevar', action='store_true', help='variation of fake fit')
+parser.add_argument('--noSyst', action='store_true', help='do not include systematics')
 args = parser.parse_args()
 
 print("====== Plotter Initialization ======")
@@ -105,9 +106,9 @@ l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionM
 #l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
 l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
 #l_regions_presels = ["ResolvedSignalRegionMETInvertMTSame"]
-l_regions_presels = ["BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]#,"BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
+l_regions_presels = ["BoostedLowMassControlRegion","ResolvedLowMassControlRegion","BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
+#l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_ElTau","_MuTau"]] # ,"_ElTau", "_MuTau"
-
 print(l_regions)
 
 plotsavedirname = f"{args.outputdir}{savedirsuffix}"  
@@ -131,93 +132,22 @@ for region in l_regions :
     for (vJ,vEl,vMu) in IDcomb :
         TauID = f"vJet{vJ}_vEl{vEl}_vMu{vMu}"
 
-        # Dictionary structure [bool:Logy , int:rebin , string:xaxislabel , string:outputfilename , double:xmin , double:xmax , list(double):rebinningarray , bool:hastobeblind ]
-        VarDic = {
-            f"{region}/Nevents" : [True,1,"nEvents","nEvents",0,1],
-            #f"{region}/Cutflow" : [True,1,"Cutflow","Cutflow",0,10],
-            f"{region}/MET" : [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,225,1000],True],
-            f"{region}/Tauh_pT" : [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,800],True],
-            f"{region}/Tauh_eta" : [True,4,"Leading Hadronic Tau #eta (GeV)","Tauh_Eta",-2.5,2.5,[-2.5,-2.1,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.1,2.5],True],
-            f"{region}/Tauh_DM" : [True,1,"Leading Hadronic Tau Decay Mode","Tauh_DM",0.,15.],
-            #f"{region}/Jets/FatJet_0_Pt" : [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,2500.,[0,100,200,300,400,500,600,700,800,900,1000,2500],True],
-            #f"{region}/Jets/FatJet_0_Eta" : [True,2,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.],
-            #f"{region}/Jets/FatJet_0_LSF" : [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.],
-            f"{region}/Jets/Jet_0_Pt" : [True,100,"Leading AK4 Jet Pt (GeV)","AK4j0_Pt",0.,1000.,[0,40,100,200,300,400,1000],True],
-            f"{region}/Jets/Jet_0_Eta" : [True,2,"Leading AK4 Jet #eta","AK4j0_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.6,-0.3,0.,0.3,0.6,1.0,1.6,2.4,3.0],True],
-            f"{region}/Jets/Jet_1_Pt" : [True,50,"Subleading AK4 Jet Pt (GeV)","AK4j1_Pt",0.,450.,[0,40,60,80,120,160,450],True],
-            f"{region}/Jets/Jet_1_Eta" : [True,5,"Subleading AK4 Jet #eta","AK4j1_Eta",-3.,3.,[-3.,-2.4,-1.6,-1.0,-0.4,0.,0.4,1.0,1.6,2.4,3.0],True],
-            f"{region}/HighPtTight/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,350,500,1000],True],
-            f"{region}/HighPtTight/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","TightLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
-            f"{region}/HighPtLoose/Lepton_0_Pt" : [True,50,f"Leading {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,100,150,200,250,400,1000],True],
-            f"{region}/HighPtLoose/Lepton_0_Eta" : [True,2,f"Leading {lep_ex} #eta","LooseLep0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True],
-            f"{region}/nFatJet" : [True,1,"Number of AK8 Jets","nAK8",0.,10.],
-            f"{region}/nJets" : [True,1,"Number of AK4 Jets","nAK4",0.,10.],
-            f"{region}/nBJets" : [True,1,"Number of b-Tagged AK4 Jets","nbAK4",0.,10.],
-            f"{region}/nLooseLeptons" : [True,1,f"Number of Boosted ID {lep_ex}","nBoostedIDLeps",0.,3.,[0,1,2,3],True],
-            f"{region}/nTightLeptons" : [True,1,f"Number of Resolved ID {lep_ex}","nResolvedIDLeps",0.,3.,[0,1,2,3],True],
-        }
-
         channel = ""
 
         if "Boosted" in region :
             jetstring = "J"
             lepjetstring = "J"
-            VarDic = remove_keys_containing_strings(VarDic,bst_remove)
-            VarDic[f"{region}/Mthll"]             = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}) [GeV]","Mtl",0.,1500.,[0,50,100,150,250,300,350,400,450,500,550,600,650,700,1000,1500],True]
-            VarDic[f"{region}/Mthllmet"]          = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}+#slash{{E}}_{{T}}) [GeV]","Mtl_MET",0.,1500.,[0,50,100,150,300,350,400,450,500,550,750,1000,1500],True]
-            #VarDic[f"{region}/BoostedWR_withMET"] = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR_withMET",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMTWR"]        = [True,200,f"m_{{T}}(#tau_{{h}}J) [GeV]","ProperMTWR",0.,1000.,[0,50,100,150,250,1000],True]
-            #VarDic[f"{region}/dRl0tau"]           = [True,3,"#DeltaR(l,#tau_{h})","dRl0tau",0.,6.]
-            VarDic[f"{region}/FatJet/Pt"]         = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,550,1000],True]
-            VarDic[f"{region}/FatJet/Mass"]       = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,150,500],True]
-            VarDic[f"{region}/FatJet/SDMass"]     = [True,1,"Leading AK8 Jet Soft Drop Mass [GeV]","AK8J0_SDMass",0.,500.,[0,40,90,150,500],True]
-            VarDic[f"{region}/FatJet/Eta"]        = [True,1,"Leading AK8 Jet #eta","AK8J0_Eta",-3.,3.,[-3.0,-2.4,-2.0,-1.6,-1.2,-0.6,0.,0.6,1.2,1.6,2.0,2.4,3.0],True]
-            VarDic[f"{region}/FatJet/LSF"]        = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
-            VarDic[f"{region}/FatJet/dRJtau"]     = [True,3,"#DeltaR(J_{lead},#tau_{h})","dRtauAK8",0.,6.]
-            if "LowMassControlRegion" in region : 
-                #VarDic[f"{region}/MET"] = [True,50,"#slash{E}_{T} (GeV)","MET",0.,1000.,[0,50,100,150,200,250,1000],True]
-                #VarDic[f"{region}/FatJet/Mass"] = [True,1,"Leading AK8 Jet Mass [GeV]","AK8J0_Mass",0.,500.,[0,25,50,75,100,125,150,500],True]
-                #VarDic[f"{region}/FatJet/Pt"] = [True,100,"Leading AK8 Jet Pt (GeV)","AK8J0_Pt",0.,1000.,[0,200,250,300,350,400,450,500,550,600,800,1000],True]
-                #VarDic[f"{region}/HighPtLoose/Lepton_0_Pt"] = [True,50,f"Leading {lep_ex} Pt (GeV)","LooseLep0_Pt",0.,1000.,[0,50,150,175,200,300,400,1000],True]
-                VarDic[f"{region}/Tauh_pT"] = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,450,800],True]
-            if "METInvert" in region :
-                VarDic[f"{region}/MET"] = [True,50,"#slash{E}_{T} (GeV)","MET",0.,100.,[0,20,30,40,50,60,70,80,90,100],True]
-
-        if "Resolved" in region : 
+        elif "Resolved" in region : 
             jetstring = "jj"
             lepjetstring = f"{lep}jj"
-            VarDic = remove_keys_containing_strings(VarDic,rsv_remove)
-            #VarDic[f"{region}/ResolvedWR"]        = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}jj) [GeV]","WRnoMET",0.,4000.,[0,250,300,500,750,1000,1250,1500,1750,2000,2500,3000,4000],True]
-            VarDic[f"{region}/Mthlt"]             = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}) [GeV]","Mtl",0.,1500.,[0,100,200,300,400,500,600,1500],True]
-            VarDic[f"{region}/Mthltmet"]          = [True,50,f"m_{{eff}}(#tau_{{h}}{lep}+#slash{{E}}_{{T}}) [GeV]","Mtl_MET",0.,1500.,[0,150,250,350,450,550,650,750,850,1500],True]
-            #VarDic[f"{region}/BoostedWR_withMET"] = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}J+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR_withMET",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMeffWR"]      = [True,200,f"m_{{eff}}(#tau_{{h}}{lep}jj+#slash{{E}}_{{T}}) [GeV]","ProperMeffWR",0.,5000.,[0,250,500,750,1000,1250,1750,5000],True]
-            VarDic[f"{region}/ProperMTWR"]        = [True,200,f"m_{{T}}(#tau_{{h}}{lep}jj) [GeV]","ProperMTWR",0.,800.,[0,50,100,150,200,500],True]
-            VarDic[f"{region}/dRtj0"]             = [True,3,"#DeltaR(j_{lead},#tau_{h})","dRtauj0",0.,6.]
-            VarDic[f"{region}/dRtj1"]             = [True,3,"#DeltaR(j_{sublead},#tau_{h})","dRtauj1",0.,6.]
-            VarDic[f"{region}/Tauh_pT"]           = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,370,450,600,800],True]
-            if "METInvert" in region :
-                VarDic[f"{region}/MET"]           = [True,50,"#slash{E}_{T} (GeV)","MET",0.,100.,[0,20,30,40,50,60,70,80,90,100],True]
-            if "ElTau" in region :
-                VarDic[f"{region}/Tauh_pT"]                 = [True,50,"Leading Hadronic Tau Pt (GeV)","Tauh_pT",0.,800.,[0,190,210,230,250,270,320,370,800],True]
-                VarDic[f"{region}/HighPtTight/Lepton_0_Pt"] = [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,300,350,400,600],True]
-                if "LowMassControlRegion" in region :
-                    VarDic[f"{region}/HighPtTight/Lepton_0_Pt"] = [True,50,f"Leading {lep_ex} Pt (GeV)","TightLep0_Pt",0.,1000.,[0,50,100,150,200,250,300,500],True]
-        if "LowMassControlRegion" in region : # ProperMTWR < 450
-            VarDic[f"{region}/ProperMTWR"] = [True,10,f"m_{{T}}(#tau_{{h}}{lep}{jetstring}) [GeV]","ProperMTWR",0.,450.,[0,50,100,150,200,250,300,350,400,450],True]
-            VarDic[f"{region}/ProperMeffWR"] = [True,10,f"m_{{Eff}}(#tau_{{h}}{lepjetstring}) [GeV]","ProperMeffWR",0.,900.,[0,450,550,650,750,850,900],True]
-
+            
         if "ElTau" in region : channel = "e#tau_{h}"
         elif "MuTau" in region : channel = "#mu#tau_{h}"
         else : channel = "e#tau_{h}+#mu#tau_{h}"
 
-        #print(SampleDic)
-        if "Preselection" in region : 
-            VarDic = remove_keys_containing_strings(VarDic,presel_remove)
-            if "Boosted" in region :
-                VarDic[f"{region}/Jets/FatJet_0_LSF"] = [True,5,"Leading AK8 Jet LSF_{3}","AK8J0_LSF",0.,1.]
-
+        VarDic = MainVarDic[(args.era,region)]
+        #print(VarDic)
+        
         for var in VarDic : 
 
             print(var)
@@ -253,7 +183,7 @@ for region in l_regions :
             for samplename in SampleDic :
                 if debug : print(f"{i} : {samplename}")
                 f = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_{samplename}.root")
-                fPromptFake = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_PromptFakes.root")
+                #fPromptFake = TFile(f"{SampleDir}/{args.era}/{args.analyzername}_PromptFakes.root")
                 if debug : print(f"{samplename} file : {f}")
                 if divfake :
                     if samplename == "DataDrivenTau" :
@@ -275,10 +205,9 @@ for region in l_regions :
                         #    h1.Scale(getTauFakeNormalization(args.era,region))
                         #    print(f"Fake : {h1.Integral()}")
                         h2 = f.Get(f"Central/__PromptTau__NonPromptLepton/{var}") 
-                        h3 = fPromptFake.Get(f"Central/{var}")
-                        h = h1 + h2 if h1 is not None and h2 is not None else h1 if h1 is not None else h2 if h2 is not None else None
-                        #h = h_ - h3 if h3 is not None else h_ 
-                        #h.Scale(getTauFakeNormalization(args.era,region))
+                        #h3 = fPromptFake.Get(f"Central/{var}")
+                        if check(f,f"Central/__PromptTau__NonPromptLepton/{var}") : h = h1 + h2
+                        else : h = h1
                     else : h = f.Get(f"Central/__PromptTau__PromptLepton/{var}")
                 if h == None : continue
                 if debug : print(f"{samplename} hist : {h}")
@@ -299,7 +228,8 @@ for region in l_regions :
                 
                 if samplename != "Fakes" : 
                     #tracemalloc.start()
-                    l_err = GetTotalSystError(args.input,samplename,args.era,var,VarDic)
+                    if not args.noSyst : l_err = GetTotalSystError(args.input,samplename,args.era,var,VarDic)
+                    else : l_err = [0 for _ in range(0,h_tmp_HS.GetNbinsX()+1)]
                     #snapshot = tracemalloc.take_snapshot()
                     #display_top(snapshot)
                     for j in range(1,h_tmp_HS.GetNbinsX()+1) :
@@ -426,9 +356,9 @@ for region in l_regions :
             for i in range(1, ratio_stat.GetNbinsX() + 1):
                 ratio_stat.SetBinContent(i, 1.0)
 
-
+            dummy = 0.
             # Systematic Errors : globally scaled systematic errors
-            dummy = 0.2
+            if not args.noSyst : dummy = 0.2
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 #print(GetFakeFitErr_Syst(args.input,args.era,var,VarDic,i))
                 ratio_syst.SetBinError(i,  sqrt(ratio.GetBinError(i)**2+dummy**2)   )
