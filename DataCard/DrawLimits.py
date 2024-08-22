@@ -4,12 +4,12 @@ import os
 from array import array
 
 inputDir = "/data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Limits/"
-WP = "240513"
+WP = "240808"
 l_mwr = [2000,2400,3600,4000,4400,4800]
 
 inputDir += WP
 
-for era in ["2016","Run2"] :
+for era in ["2017"] :
     os.system(f"mkdir -p Plots/{WP}/{era}")
     for mwr in l_mwr :
         c = TCanvas(f"{era}_WR{mwr}",f"{era}_WR{mwr}",1000,1000)
@@ -115,7 +115,7 @@ for era in ["2016","Run2"] :
 
         latex.SetTextFont(42)
         latex.SetTextSize(0.6*textSize)
-        latex.DrawLatex(0.65, 0.9175,"138 fb^{-1} (13 TeV)")
+        latex.DrawLatex(0.65, 0.9175,f"{GetLumi(era)} fb^{{-1}} (13 TeV)")
 
 
         c.SaveAs(f"Plots/{WP}/{era}/WR{mwr}_limit.png")

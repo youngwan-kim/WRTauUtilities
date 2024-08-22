@@ -8,14 +8,17 @@ from utils import *
 parser = argparse.ArgumentParser(description='option')
 parser.add_argument('--Asymptotic', action='store_true')
 parser.add_argument('--Full', action='store_true')
+parser.add_argument('-e', dest='years', nargs="+")
+parser.add_argument('-t', dest='myWPs', nargs="+")
 args = parser.parse_args()
 
 workdir = "/data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Batch/"
 
+myWPs, years = args.myWPs, args.years
 
-years = ["2016preVFP","2016postVFP","2017","2018"]
-years = ["2016","Run2"]
-myWPs = ["240513"]
+#years = ["2016preVFP","2016postVFP","2017","2018"]
+#years = ["2016","Run2"]
+#myWPs = ["240513"]
 
 channels = [""]
 tags     = [""] 
@@ -41,13 +44,14 @@ for WP in myWPs:
             tree_Asym.GetEntry(2) # substitute for obs. limit for now
             #f.write(mass+"\t"+str(round(tree_Asym.limit,3))+"\t")
             #f.write(mass+"\t"+str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-            f.write(str(mn)+"\t"+str(round(tree_Asym.limit/3.16,3))+"\t") # FIXME estimating full Run2+3 from 2017
+            f.write(str(mn)+"\t"+str(round(tree_Asym.limit/1.87,5))+"\t") # FIXME estimating full Run2+3 from 2017
         
             for i in range(5): # expected limits
               tree_Asym.GetEntry(i)
               #f.write(str(round(tree_Asym.limit,3))+"\t")
               #f.write(str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-              f.write(str(round(tree_Asym.limit/3.16,3))+"\t") # FIXME estimating full Run2+3 from 2017
+              f.write(str(round(tree_Asym.limit/1.87,5))+"\t") # FIXME estimating full Run2+3 from 2017
+              print(round(tree_Asym.limit/1.87,5))
             f.write("\n")
   
     if args.Full:

@@ -173,4 +173,8 @@ Plotter/report.py
 DataCard/Batch
 DataCard/Cards*
 DataCard/Outputs*
+DataCard/FitDiagnostics*
+DataCard/Limits*
+DataCard/test*
+DataCard/*.root
 DataCard/Workspaces*

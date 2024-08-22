@@ -4,12 +4,12 @@ import os
 from array import array
 
 inputDir = "/data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Limits/"
-WP = "240513"
+WP = "240808"
 l_mwr = [""]
 
 inputDir += WP
 
-for era in ["2016","Run2"] :
+for era in ["2017"] :
     os.system(f"mkdir -p Plots/{WP}/{era}")
     for mwr in l_mwr :
         c = TCanvas(f"ratio0p5",f"ratio0p5",1000,1000)
@@ -83,7 +83,7 @@ for era in ["2016","Run2"] :
 
         lg.AddEntry(gr_theory,"Theory","l")
         lg.AddEntry(gr_13TeV_exp,"Expected","l")
-        lg.AddEntry(gr_extrapolate,"Extrapolation","l")
+        #lg.AddEntry(gr_extrapolate,"Extrapolation","l")
         lg.AddEntry(gr_band_oneSigma,"68% Expected","f")
         lg.AddEntry(gr_band_twoSigma,"95% Expected","f")
         
@@ -104,7 +104,7 @@ for era in ["2016","Run2"] :
         gr_band_oneSigma.Draw("3same")
         gr_13TeV_exp.Draw("lsame")
         gr_theory.Draw("lsame")
-        gr_extrapolate.Draw("lsame")
+        #gr_extrapolate.Draw("lsame")
         lg.Draw()
 
         latex = TLatex()
@@ -125,7 +125,7 @@ for era in ["2016","Run2"] :
 
         latex.SetTextFont(42)
         latex.SetTextSize(0.6*textSize)
-        latex.DrawLatex(0.575, 0.9175,"36.3 fb^{-1} (13 TeV, 2016)")
+        latex.DrawLatex(0.575, 0.9175,f"{GetLumi(era)} fb^{{-1}} (13 TeV)")
 
 
         c.SaveAs(f"Plots/{WP}/{era}/R0p5_limit.png")

@@ -1,7 +1,7 @@
 import os
 from ROOT import *
 
-rebins = [0,50,100,150,200,500,1000,1500,2000,2500,3000,3500,4000,5000,6000,7000,8000,9000,10000,15000]
+rebins = [0,50,100,150,200,250,300,350,400,500,600,700,800,900,1000,1250,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500]
 
 d_mass = {
     2000 : [200,400,600,1000,1400,1800,1900],
@@ -74,3 +74,11 @@ def getSystString(systname) :
         return f"_{systname.replace('Syst_','')}"
     elif "Central_" in systname:
         return f"_{systname.replace('Central_','')}"
+
+def GetLumi(era) :
+    if era == "2016preVFP" : return 19.5
+    elif era == "2016postVFP" : return 16.8
+    elif era == "2016" : return 36.3
+    elif era == "2017" : return 41.5
+    elif era == "2018" : return 59.8
+    elif era == "Run2" : return 138
