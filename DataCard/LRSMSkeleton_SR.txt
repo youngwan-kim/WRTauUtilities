@@ -14,10 +14,9 @@ observation                   -1
 # on each process and bin
 bin                           SR           SR           SR           SR            SR             
 process                       top          boson        fakeMC       fake          signal         
-process                       1            1            1            2             -1             
+process                       0            1            2            3             -1             
 rate                          -1           -1           -1           -1            -1             
-Lumi                lnN       ##lumi##     ##lumi##     ##lumi##     ##lumi##      ##lumi##       
-Dummy               lnN       1.3          1.3          1.3          1.3           1.3            
+Lumi                lnN       ##lumi##     ##lumi##     ##lumi##     -             ##lumi##       
 Fake                lnN       -            -            -            1.3           -              
 TauFRErr            shape     -            -            -            1             -              
 JetEn               shape     1            1            1            -             1              
@@ -26,6 +25,8 @@ TauIDSFExt          shape     1            1            1            -          
 TauIDSFStat         shape     1            1            1            -             1              
 TauIDSFSyst         shape     1            1            1            -             1              
 TauTriggerSF        shape     1            1            1            -             1              
+PDF                 lnN       -            -            -            -             ##PDF##        
+Scale               shape     -            -            -            -             1              
 #JetRes             shape     1            1            1            -             1              
 #JetMass            shape     1            1            1            -             1              
 #JetMassSmear       shape     1            1            1            -             1              

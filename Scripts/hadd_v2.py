@@ -37,6 +37,13 @@ signals = {
     4800 : [200,400,600,800,1000,1400,1800,2200,2600,3000,3800,4200,4600,4700],
 }
 
+signals_2018 = { }
+
+for key in range(1000,6501,500) :
+    signals_2018[key] = list(range(100,key,100))
+
+signalname = "WRtoTauNtoTauTauJets"
+
 l_lep = ['NonpromptLepton','PromptLepton']
 l_tau = ['NonpromptTau','PromptTau']
 
@@ -51,8 +58,12 @@ def GetSKOutDir(analyzername,era) :
 
 def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
 
+    signals_ = signals
     if era == "2017" or "2016" in era : samplegroup_skim["ST"] = ["SingleTop*"]
-    elif era == "2018" : samplegroup_skim["ST"] = ["ST*"]
+    elif era == "2018" : 
+        samplegroup_skim["ST"] = ["ST*"]
+        signals_ = signals_2018
+        signalname = "WRtoNTautoTauTauJJ"
 
     hasSkim = skim is not ''
 
@@ -75,9 +86,10 @@ def HADDnGet(analyzername,era,flag,outdir,skim,onlysignals) :
     else : samplegroup = samplegroup_noskim
 
     #Signals
-    for mwr in signals :
-        for mn in signals[mwr] :
-            os.system(f"cp {hadddir}/RunSyst__/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/Signals/{basename}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
+    
+    for mwr in signals_ :
+        for mn in signals_[mwr] :
+            os.system(f"cp {hadddir}/RunSyst__/{basename}_{signalname}_WR{mwr}_N{mn}.root ../RootFiles/{outdir}/{era}/Signals/{basename}_{signalname}_WR{mwr}_N{mn}.root")
     if onlysignals : return
     
     #Data

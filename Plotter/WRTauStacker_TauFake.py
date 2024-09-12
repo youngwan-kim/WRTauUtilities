@@ -14,6 +14,8 @@ parser = argparse.ArgumentParser(description='The really not proud stupid effin 
 parser.add_argument('-a', dest='analyzername', type=str, help='Analyzer name',default="WRTau_Analyzer")
 parser.add_argument('-i', dest='input', type=str, help='Input directory timestamp')
 parser.add_argument('-e', dest='era', type=str, help='Era to plot', default=2017)
+parser.add_argument('-v', dest="verbosity", type=int, help='Plotter verbosity', default=0)
+parser.add_argument('--mWRonly', action='store_true', help="only plot mWR")
 parser.add_argument('--userflags', type=str, help='user flag used', default="")
 parser.add_argument('--WJGen', type=str, help='Wjets generator', default="MG")
 parser.add_argument('--outputdir', type=str, help='Output directory name',default=default_outputdir)
@@ -40,6 +42,7 @@ onlyPNG = args.onlypng
 wjgen = args.WJGen
 fakev = args.fakevar
 divfake = args.dividefakes
+verbosity = args.verbosity
 
 if wjgen not in ["MG","Sherpa"] :
     print(f"{wjgen} is not available")
@@ -63,6 +66,14 @@ d_signals = {
     4000 : [500,TColor.GetColor("#FF008E")],
     4800 : [50000,TColor.GetColor("#00FFD1")],
 }
+signalstring = "WRtoTauNtoTauTauJets"
+if args.era == "2018" :
+    d_signals = {
+        2000 : [50,TColor.GetColor("#94FC13")],
+        4000 : [500,TColor.GetColor("#FF008E")],
+        6000 : [50000,TColor.GetColor("#00FFD1")],
+    }
+    signalstring = "WRtoNTautoTauTauJJ"
 
 l_SignalRegions = ["ResolvedSignalRegion_ElTau","ResolvedSignalRegion_MuTau",
                    "BoostedSignalRegion_ElTau", "BoostedSignalRegion_MuTau"]
@@ -99,23 +110,26 @@ l_regions_presels = ["BoostedPreselection"]#,"ResolvedPreselection"]
 l_regions_presels = ["BoostedSignalRegionMETInvert","ResolvedSignalRegionMETInvert",
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
-l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
+
 l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame",
                      "BoostedLowMassControlRegion","ResolvedLowMassControlRegion"]
 
 #l_regions_presels = ["BoostedSignalRegion","ResolvedSignalRegion"]
-l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
+#l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
 #l_regions_presels = ["ResolvedSignalRegionMETInvertMTSame"]
 l_regions_presels = ["BoostedLowMassControlRegion","ResolvedLowMassControlRegion","BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
-#l_regions_presels = ["BoostedSignalRegionMETInvertMTSame","ResolvedSignalRegionMETInvertMTSame"]
+#l_regions_presels = ["BoostedPreselection"]
 l_regions = [f"{region}{suffix}" for region in l_regions_presels for suffix in ["_ElTau","_MuTau"]] # ,"_ElTau", "_MuTau"
 print(l_regions)
 
 plotsavedirname = f"{args.outputdir}{savedirsuffix}"  
 
 os.system(f"mkdir -p ../Plots/{plotsavedirname}/{args.era}")
-os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}")
-os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{args.era}")
+print(args.mWRonly)
+if not args.mWRonly : 
+    os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}")
+    os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{args.era}")
+    
 
 for region in l_regions :
 
@@ -128,7 +142,7 @@ for region in l_regions :
         SampleDic["DataDrivenTau"] =  ["Fake #tau (Data)", TColor.GetColor("#5FAD56")]   
 
     os.system(f"mkdir -p ../Plots/{plotsavedirname}/{args.era}/{region}")
-    os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{args.era}/{region}")
+    if not args.mWRonly : os.system(f"cp ../Data/index.php ../Plots/{plotsavedirname}/{args.era}/{region}")
     for (vJ,vEl,vMu) in IDcomb :
         TauID = f"vJet{vJ}_vEl{vEl}_vMu{vMu}"
 
@@ -147,20 +161,23 @@ for region in l_regions :
 
         VarDic = MainVarDic[(args.era,region)]
         #print(VarDic)
+        if args.mWRonly :
+            VarDic = {f"{region}/ProperMeffWR" : VarDic[f"{region}/ProperMeffWR"]}
         
         for var in VarDic : 
 
             print(var)
-            hastobeBlinded = (len(VarDic[var]) == 8) and VarDic[var][7]
+            hastobeBlinded = (len(VarDic[var]) == 8) and VarDic[var][7] 
             blindbins =[]
             if hastobeBlinded : blindbins = VarDic[var][6][:len(VarDic[var][6])//2]
 
-            print(blindbins)
+            print(hastobeBlinded)
+            #print(blindbins)
 
             if debug : print(f"var : {var} {VarDic[var]}")
             savedir = f"../Plots/{plotsavedirname}/{args.era}/{region}/{TauID}"
             os.system(f"mkdir -p {savedir}")
-            os.system(f"cp ../Data/index.php {savedir}")
+            if not args.mWRonly :  os.system(f"cp ../Data/index.php {savedir}")
             c = TCanvas(f"c_{region}_{TauID}_{var}",f"c_{region}_{TauID}_{var}",720,800)
             if debug : print(f"canvas : {c}")
             #l = TLegend(0.415,0.75,0.875,0.875)
@@ -295,7 +312,7 @@ for region in l_regions :
             elif hastobeBlinded : 
                 h_data_tmp.GetXaxis().SetRangeUser(VarDic[var][4],VarDic[var][6][:len(VarDic[var][6])//2][-1]) #TEST
                 h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(len(VarDic[var][6])-1,"",array.array('d',VarDic[var][6]))
-                if willBlind : h_data.GetXaxis().SetRange(1,len(blindbins))
+                #if willBlind : h_data.GetXaxis().SetRange(1,len(blindbins))
             else : h_data = h_data_tmp.Clone(f"{region}_{TauID}_{var}_DATA_clone").Rebin(VarDic[var][1])
             h_data.SetStats(0) 
             h_data.SetMarkerStyle(8)
@@ -308,7 +325,8 @@ for region in l_regions :
             #if hastobeBlinded : h_data.GetXaxis().SetRangeUser(VarDic[var][4],VarDic[var][6][:len(VarDic[var][6])//2][-1]) #TEST
             h_data.GetXaxis().SetLimits(VarDic[var][4],VarDic[var][5])
             l.AddEntry(h_stackerr,"Pred. Unc.","f")
-            l.AddEntry(h_data,"Obs.+ Unc.","lep")
+            l.AddEntry(h_data,"Obs.","lep")
+            if not hastobeBlinded : l.AddEntry(h_data,"Obs.","lep")
             #if "SignalRegion" in region or "Preselection" in region :
             #    if "Invert" not in region :
             #        for i in range(1,h_data.GetNbinsX()+1):
@@ -361,7 +379,7 @@ for region in l_regions :
             if not args.noSyst : dummy = 0.2
             for i in range(1, ratio_syst.GetNbinsX() + 1):
                 #print(GetFakeFitErr_Syst(args.input,args.era,var,VarDic,i))
-                ratio_syst.SetBinError(i,  sqrt(ratio.GetBinError(i)**2+dummy**2)   )
+                ratio_syst.SetBinError(i,  sqrt(ratio.GetBinError(i)**2 )   )
 
             ratio_syst.SetStats(0)
             ratio_syst.SetFillColor(TColor.GetColor('#fee0d2'))
@@ -375,6 +393,9 @@ for region in l_regions :
             ratio_stat.SetMarkerStyle(20)
             ratio_stat.SetMarkerColorAlpha(kBlack,0)
             
+            ratio_dummy = ratio_syst.Clone("BlindDummy")
+            for i in range(1,ratio_dummy.GetNbinsX()+1) :
+                ratio_dummy.SetBinError(i,1.48)
 
             l_max = [] ; l_max.append(hs.GetMaximum()) ; l_max.append(h_data.GetMaximum())
             pad_up.cd()
@@ -406,9 +427,10 @@ for region in l_regions :
 
             latex.SetTextFont(42)
             latex.SetTextSize(0.6*textSize)
+            latex.SetTextAlign(31)
             lumi = str(getLumi(str(args.era)))
-            latex.DrawLatex(0.6, 0.9175,lumi+" fb^{-1} (13 TeV, "+f"{str(args.era)})")
-
+            latex.DrawLatex(0.885, 0.9175,lumi+" fb^{-1} (13 TeV)")
+            latex.SetTextAlign(13)
             latex.SetTextFont(42)
             latex.SetTextSize(0.575*textSize)
             if "Preselection" in region : 
@@ -458,9 +480,15 @@ for region in l_regions :
             l3.AddEntry(ratio_syst,"Stat. #oplus Syst. Unc.","lpf")
 
             #ratio.Draw("p&hist&e1")
-            ratio_syst.Draw("e2&f")
-            ratio_stat.Draw("e2&f&same") #test ; not real systematic err yet
-            ratio.Draw("p&hist&same")
+            if not hastobeBlinded : 
+                ratio.Draw("p&hist&same")
+                ratio_syst.Draw("e2&f")
+                ratio_stat.Draw("e2&f&same") 
+            else : 
+                ratio_syst.Draw("e2&f")
+                ratio_stat.Draw("e2&f&same") 
+                ratio.Draw("p&hist&same")
+                #ratio_dummy.Draw("e2&f")
             l3.Draw()
 
             latex_down = TLatex()
@@ -468,6 +496,8 @@ for region in l_regions :
             latex_down.SetTextFont(52)
             latex_down.SetTextSize(2.25*textSize)
             latex_down.DrawLatex(0.125,0.8,"Prefit")
+            #if not hastobeBlinded : latex_down.DrawLatex(0.125,0.8,"Prefit")
+            #else : latex_down.DrawLatex(0.125,0.8,"Blinded")
 
             c.cd()
             pad_down.Draw()
@@ -487,10 +517,12 @@ for region in l_regions :
                 ind = 0
                 for mwr in d_signals :
                     if "Boosted" in region : mn = 200
-                    elif "Resolved" in region : mn = mwr-100    
-                    f_signal = TFile(f"{os.getenv('WRTau_Output')}/{args.input}/{args.era}/Signals/{args.analyzername}_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
+                    elif "Resolved" in region : mn = mwr-200    
+                    f_signal = TFile(f"{os.getenv('WRTau_Output')}/{args.input}/{args.era}/Signals/{args.analyzername}_{signalstring}_WR{mwr}_N{mn}.root")
                     h_signal_tmp = f_signal.Get(f"Central/{var}")
-                    if h_signal_tmp == None : continue
+                    if h_signal_tmp == None : 
+                        print(f"no {mwr} {mn}")
+                        continue
                     h_signal_tmp.SetDirectory(0)
                     #print(h_signal_tmp)
                     #h_signal = h_signal_tmp.Clone(f"{region}_{TauID}_{var}_{mwr}_signal_{ind}").Rebin(VarDic[var][1])

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 
-tag = "240805"
+tag = "240808"
 
 signals = {
     2000 : [200,400,600,1000,1400,1800,1900],
@@ -16,12 +16,14 @@ signals = {
 
 os.system(f"mkdir -p ../RootFiles/{tag}/2016/DATA")
 os.system(f"mkdir -p ../RootFiles/{tag}/2016/Signals")
+os.system(f"mkdir -p ../RootFiles/{tag}/2016/RunSyst")
 
 for sample in ["Boson_noVJets","PromptFakes","Fakes","DataDrivenTau","Top","MCLeptonFake"] :
-    os.system(f"hadd ../RootFiles/{tag}/2016/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016postVFP/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016preVFP/WRTau_Analyzer_{sample}.root")
+    #os.system(f"hadd ../RootFiles/{tag}/2016/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016postVFP/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016preVFP/WRTau_Analyzer_{sample}.root")
+    os.system(f"hadd ../RootFiles/{tag}/2016/RunSyst/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016postVFP/RunSyst/WRTau_Analyzer_{sample}.root ../RootFiles/{tag}/2016preVFP/RunSyst/WRTau_Analyzer_{sample}.root")
 
-for mwr in signals :
-    for mn in signals[mwr] :
-        os.system(f"hadd ../RootFiles/{tag}/2016/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{tag}/2016postVFP/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{tag}/2016preVFP/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
+#for mwr in signals :
+#    for mn in signals[mwr] :
+#        os.system(f"hadd ../RootFiles/{tag}/2016/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{tag}/2016postVFP/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root ../RootFiles/{tag}/2016preVFP/Signals/WRTau_Analyzer_WRtoTauNtoTauTauJets_WR{mwr}_N{mn}.root")
 
-os.system(f"hadd ../RootFiles/{tag}/2016/DATA/WRTau_Analyzer_DATA.root ../RootFiles/{tag}/2016postVFP/DATA/WRTau_Analyzer_DATA.root ../RootFiles/{tag}/2016preVFP/DATA/WRTau_Analyzer_DATA.root")
+#os.system(f"hadd ../RootFiles/{tag}/2016/DATA/WRTau_Analyzer_DATA.root ../RootFiles/{tag}/2016postVFP/DATA/WRTau_Analyzer_DATA.root ../RootFiles/{tag}/2016preVFP/DATA/WRTau_Analyzer_DATA.root")

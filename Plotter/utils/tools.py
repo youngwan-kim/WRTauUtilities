@@ -27,9 +27,16 @@ def getXsec(mWR,mN) :
                 return float(line.split(",")[2])
 
 
-def getNormalization(era,mwr,mn) :
-    return getLumi(str(era))/getXsec(mwr,mn) 
+def getXsecNew(mWR,mN) :
+    with open(f"{os.getenv('WRTau_Data')}/xsec_new.csv") as f:
+        for line in f :
+            if mWR == float(line.split(",")[0]) and mN == float(line.split(",")[1]) : 
+                return float(line.split(",")[2])
 
+
+def getNormalization(era,mwr,mn) :
+    if era != "2018" : return getLumi(str(era))/getXsec(mwr,mn) 
+    else : return getLumi(str(era))/getXsecNew(mwr,mn) 
 
 def remove_keys_containing_strings(dic, strings_to_remove):
     keys_to_remove = []

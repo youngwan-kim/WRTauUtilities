@@ -85,6 +85,14 @@ SampleDic = {
 
 }
 
+SampleDic = {
+
+    "Boson_noVJets" : ["Others",TColor.GetColor("#5790fc")],
+    "Top" : ["t#bar{t}+tX", TColor.GetColor("#DE1A1A")],
+    "Fakes" : ["Nonprompt",TColor.GetColor("#f89c20")]
+
+}
+
 # regions to be plotted
 l_SignalRegions = ["ResolvedSignalRegion_ElTau","ResolvedSignalRegion_MuTau",
                    "BoostedSignalRegion_ElTau", "BoostedSignalRegion_MuTau"]
@@ -153,7 +161,7 @@ c.cd()
 c.SetLogy()
 hs.SetTitle("")
 hs.SetMinimum(0.01)
-hs.SetMaximum(150)
+hs.SetMaximum(5000)
 hs.Draw()
 h_stackerr.Draw("e2&same")
 l.Draw()

@@ -1,0 +1,28 @@
+imax * number of bins
+jmax * number of processes minus 1
+kmax * number of nuisance parameters
+----------------------------------------------------------------------------------------------------------------------------------
+shapes *    ch1  /data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Outputs/##TAG##/LMCR/##ERA##/WR##mwr##_N##mn##_card_input.root $PROCESS_LMCR $PROCESS_LMCR_$SYSTEMATIC
+shapes *    ch2  /data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Outputs/##TAG##/SR/##ERA##/WR##mwr##_N##mn##_card_input.root $PROCESS_SR $PROCESS_SR_$SYSTEMATIC
+----------------------------------------------------------------------------------------------------------------------------------
+bin          ch1    ch2   
+observation  -1     -1    
+-------------------------------------------------------------------------------------------------------------------------------------------
+bin                               ch1          ch1          ch1           ch1         ch2          ch2           ch2           ch2         
+process                           signal       top          boson         fake        signal       boson         top           fake        
+process                           0            1            2             4           0            2             1             4           
+rate                              -1           -1           -1            -1          -1           -1            -1            -1          
+-------------------------------------------------------------------------------------------------------------------------------------------
+Fake                    lnN       -            -            -             1.3         -            -             -             1.3         
+JetEn                   shape     1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+Lumi                    lnN       ##lumi##     ##lumi##     ##lumi##      -           ##lumi##     ##lumi##      ##lumi##      -           
+TauEn                   shape     1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+TauFRErr                shape     -            -            -             1.0         -            -             -             1.0         
+TauIDSFExt              shape     1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+TauIDSFStat             shape     1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+TauIDSFSyst             shape     1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+TauTriggerSF            lnN       1.0          1.0          1.0           -           1.0          1.0           1.0           -           
+PDF                     shape     1.0          -            -             -           1.0          -             -             -           
+Scale                   shape     1.0          -            -             -           1.0          -             -             -           
+ch1 autoMCStats 0 0 1
+ch2 autoMCStats 0 0 1

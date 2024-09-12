@@ -9,7 +9,9 @@ args = parser.parse_args()
 
 with open("RunList_"+args.tag+".txt",'w') as f:
     for era in args.l_era :
-        for mwr in d_mass :
-            for mn in d_mass[mwr]:
+        d_mass_ = d_mass
+        if era == "2018" : d_mass_ = d_mass_2018
+        for mwr in d_mass_ :
+            for mn in d_mass_[mwr]:
                 card = f"{input_path}/{args.tag}/{era}/card_WR{mwr}_N{mn}.root\n"
                 f.write(card)

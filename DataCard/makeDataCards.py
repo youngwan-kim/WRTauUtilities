@@ -25,13 +25,21 @@ noscaling = args.no_scaleSignals
 if noscaling :
     args.tag += "_noScale"
 
-for era in ["2017"] :
+d_mass_ = d_mass
+
+for era in ["2018"] :
+    if era == "2018" : d_mass_ = d_mass_2018
     os.system(f"mkdir -p Cards/{args.tag}/{era}")
-    for mwr in d_mass :
-        for mn in d_mass[mwr] :
-            os.system(f"cp LRSMSkeleton_SR.txt Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
+    for mwr in d_mass_ :
+        for mn in d_mass_[mwr] :
+            #PDFUnc = GetPDFUnc(mwr,mn,args.tag,era)
+            #if PDFUnc != "-"  : PDFUnc = PDFUnc/100.+1.0
+            #print(mwr,mn,PDFUnc)
+            os.system(f"cp cardTemplate.txt Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
             os.system(f"sed -i 's/##TAG##/{args.tag}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
             os.system(f"sed -i 's/##ERA##/{era}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
             os.system(f"sed -i 's/##lumi##/{d_lumi[era]}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
             os.system(f"sed -i 's/##mwr##/{mwr}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
             os.system(f"sed -i 's/##mn##/{mn}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
+            #os.system(f"sed -i 's/##PDF##/{PDFUnc}/g' Cards/{args.tag}/{era}/card_WR{mwr}_N{mn}.txt")
+            print(f"{mwr},{mn} done ")

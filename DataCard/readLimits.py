@@ -24,34 +24,35 @@ channels = [""]
 tags     = [""] 
 IDs      = [""]
 
-
+d_mass_ = d_mass
 
 for WP in myWPs:
   this_workdir = workdir+WP
-  
   for year, channel, ID, tag in [[year, channel, ID, tag] for year in years for channel in channels for ID in IDs for tag in tags]:
     os.system("mkdir -p Limits/"+WP+"/"+year)  
+    if year == "2018" : d_mass_ = d_mass_2018
     if args.Asymptotic:
-      for mwr in d_mass :
+      for mwr in d_mass_ :
         with open("Limits/"+WP+"/"+year+"/WR"+str(mwr)+".txt", 'w') as f:
-          for mn in d_mass[mwr]:
+          for mn in d_mass_[mwr]:
             this_name = "WR" + str(mwr) + "_N" + str(mn) 
             path = this_workdir + "/" + year + "/Asymptotic/" + this_name + "/output/"+this_name+"_Asymptotic.root"
-        
+            
             f_Asym = TFile.Open(path)
+            if not check(f_Asym, "limit") : continue
             tree_Asym = f_Asym.Get("limit")
             print(f_Asym, tree_Asym)
             tree_Asym.GetEntry(2) # substitute for obs. limit for now
             #f.write(mass+"\t"+str(round(tree_Asym.limit,3))+"\t")
             #f.write(mass+"\t"+str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-            f.write(str(mn)+"\t"+str(round(tree_Asym.limit/1.87,5))+"\t") # FIXME estimating full Run2+3 from 2017
+            f.write(str(mn)+"\t"+str(round(tree_Asym.limit/1.296,7))+"\t") # FIXME estimating full Run2+3 from 2017
         
             for i in range(5): # expected limits
               tree_Asym.GetEntry(i)
               #f.write(str(round(tree_Asym.limit,3))+"\t")
               #f.write(str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-              f.write(str(round(tree_Asym.limit/1.87,5))+"\t") # FIXME estimating full Run2+3 from 2017
-              print(round(tree_Asym.limit/1.87,5))
+              f.write(str(round(tree_Asym.limit/1.296,7))+"\t") # FIXME estimating full Run2+3 from 2017
+              print(round(tree_Asym.limit/1.296,7))
             f.write("\n")
   
     if args.Full:

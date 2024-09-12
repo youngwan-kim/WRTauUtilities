@@ -15,7 +15,8 @@ workdir = "/data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/Data
 
 years = ["2016preVFP","2016postVFP","2017","2018"]
 years = ["Run2","2016"]
-myWPs = ["240513"]
+years = ["2018"]
+myWPs = ["240907"]
 
 channels = [""]
 tags     = [""] 
@@ -24,6 +25,10 @@ IDs      = [""]
 test = {200 : [2000,2800,3200,3600,4000,4400,4800],
         400 : [2000,2400,2800,3200,3600,4000,4400,4800],
         600 : [2000,2400,2800,3200,3600,4000,4400,4800]}
+
+test = {200 : [1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500],
+        100 : [1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500], }
+
 
 for WP in myWPs:
   this_workdir = workdir+WP
@@ -43,13 +48,15 @@ for WP in myWPs:
             tree_Asym.GetEntry(2) # substitute for obs. limit for now
             #f.write(mass+"\t"+str(round(tree_Asym.limit,3))+"\t")
             #f.write(mass+"\t"+str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-            f.write(str(mwr)+"\t"+str(round(tree_Asym.limit/3.16,3))+"\t") # FIXME estimating full Run2+3 from 2017
+            #f.write(str(mwr)+"\t"+str(round(tree_Asym.limit/1.296,7))+"\t") # FIXME estimating full Run2+3 from 2017
+            f.write(str(mwr)+"\t"+str(round(tree_Asym.limit,7))+"\t") # FIXME estimating full Run2+3 from 2017
         
             for i in range(5): # expected limits
               tree_Asym.GetEntry(i)
               #f.write(str(round(tree_Asym.limit,3))+"\t")
               #f.write(str(round(tree_Asym.limit/1.87,3))+"\t") # FIXME estimating full Run2 from 2017
-              f.write(str(round(tree_Asym.limit/3.16,3))+"\t") # FIXME estimating full Run2+3 from 2017
+              #f.write(str(round(tree_Asym.limit/1.296,7))+"\t") # FIXME estimating full Run2+3 from 2017
+              f.write(str(round(tree_Asym.limit,7))+"\t") # FIXME estimating full Run2+3 from 2017
             f.write("\n")
   
     if args.Full:

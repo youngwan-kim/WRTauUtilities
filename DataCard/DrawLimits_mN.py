@@ -4,13 +4,13 @@ import os
 from array import array
 
 inputDir = "/data9/Users/youngwan/work/SKFlatAnalyzer_Sandbox/WRTauUtilities/DataCard/Limits/"
-WP = "240808"
+WP = "240907"
 
-l_mn = [200]
+l_mn = [100,200]
 
 inputDir += WP
 
-for era in ["2017"] :
+for era in ["2018"] :
     os.system(f"mkdir -p Plots/{WP}/{era}")
     for mn in l_mn :
         c = TCanvas(f"{era}_N{mn}",f"{era}_N{mn}",1000,1000)
